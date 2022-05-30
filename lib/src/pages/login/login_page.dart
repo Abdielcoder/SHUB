@@ -10,8 +10,6 @@ import 'package:sn_progress_dialog/progress_dialog.dart';
 import 'package:uber_clone_flutter/src/utils/my_colors.dart';
 import '../../models/response_api.dart';
 import '../../models/user.dart';
-import '../../provider/push_notifications_provider.dart';
-import '../../provider/users_provider.dart';
 import '../../utils/my_snackbar.dart';
 import '../../utils/shared_pref.dart';
 
@@ -55,8 +53,8 @@ class _LoginPageState extends State<LoginPage> {
 
 
   GoogleSignInAccount _currentUser;
-  PushNotificationsProvider pushNotificationsProvider = new PushNotificationsProvider();
-  UsersProvider usersProvider = new UsersProvider();
+  // PushNotificationsProvider pushNotificationsProvider = new PushNotificationsProvider();
+  // UsersProvider usersProvider = new UsersProvider();
   ProgressDialog _progressDialog;
   LoginController _con = new LoginController();
   SharedPref _sharedPref = new SharedPref();
@@ -66,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
     int automaticId = DateTime.now().millisecondsSinceEpoch;
     String automaticIdString = automaticId.toString();
     print("session id : ${automaticIdString}");
-    usersProvider.init(context);
+    // usersProvider.init(context);
     _progressDialog = ProgressDialog();
     _googleSignIn.onCurrentUserChanged.listen((account) {
       try {
