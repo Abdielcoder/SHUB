@@ -4,6 +4,7 @@ import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:uber_clone_flutter/src/models/user.dart';
+import 'package:uber_clone_flutter/src/pages/home/home_page.dart';
 
 
 import 'package:uber_clone_flutter/src/utils/progress_dialog.dart';
@@ -50,8 +51,17 @@ class LoginController {
     var response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
-      var itemCount = jsonResponse['username'];
-      print('Number of books about http: $itemCount.');
+      var username = jsonResponse['username'];
+      var UsersID = jsonResponse['UsersID'];
+      var profile = jsonResponse['profile'];
+      var clientID = jsonResponse['clientID'];
+      print('Number of books about http: $username.');
+      Navigator.pushNamed(
+        context,
+        'home',
+        arguments: {'username':username,'UsersID':UsersID,'profile':profile,'clientID':clientID},
+      );
+
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }

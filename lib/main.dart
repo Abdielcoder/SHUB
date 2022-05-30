@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uber_clone_flutter/src/pages/home/home_page.dart';
 
 import 'package:uber_clone_flutter/src/pages/login/login_page.dart';
 import 'package:uber_clone_flutter/src/pages/splashscreen/splash_screen_page.dart';
@@ -49,6 +50,7 @@ class _MyappState extends State<MyApp> {
       routes: {
         'splashScreen':(BuildContext context) => SplashScreenPage(),
         'login':(BuildContext context) => LoginPage(),
+        'home':(BuildContext context) => HomePage(),
       },
       theme: ThemeData(
           primaryColor: MyColors.primaryColor

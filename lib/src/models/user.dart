@@ -16,7 +16,7 @@ class User {
     this.CLIENT_NAME,
     this.EMAIL_TO_CLIENT,
   });
-
+  
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       UsersID: json['UsersID'],
@@ -27,4 +27,7 @@ class User {
       EMAIL_TO_CLIENT: json['EMAIL_TO_CLIENT'],
     );
   }
+
+
+
 }

@@ -39,6 +39,7 @@ dependencies:
   geocode: 1.0.1
   intl: ^0.17.0
   flutter_polyline_points: ^1.0.0
+  eva_icons_flutter: ^2.0.1
   url_launcher: ^6.0.6
   socket_io_client: ^1.0.1
   flutter_credit_card: ^2.0.0
