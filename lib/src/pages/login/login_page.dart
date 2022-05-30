@@ -192,12 +192,12 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(
-                          height: 70.0,
+                          height: 50.0,
                         ),
                         FadeAnimation(
                             1,
@@ -213,17 +213,14 @@ class _LoginPageState extends State<LoginPage> {
                         width: 240,
                         height: 240,)
                         ),
-                        SizedBox(
-                          height: 20,
-                        ),
+
                       ],
                     ),
                   ),
                 ],
               )),
-          SizedBox(height: 20),
           AnimatedContainer(
-            margin: EdgeInsets.only(top:110),
+            margin: EdgeInsets.only(top:20),
             padding: EdgeInsets.only(top: 70,left: 32,right: 32,bottom: 32),
             width: _loginWidth,
             height: _loginHeight,
@@ -346,7 +343,7 @@ class _LoginPageState extends State<LoginPage> {
                               color: MyColors.primaryColor),
                           child: Center(
                             child: Text(
-                              "Inicia",
+                              "Login",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
@@ -437,7 +434,7 @@ class _LoginPageState extends State<LoginPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Todos los derechos reservados",
+                                    "Power By Bitlabs Systems ",
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontFamily: "Sofia"),
