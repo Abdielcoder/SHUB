@@ -154,20 +154,62 @@ class _HomePageState extends State<HomePage> {
     return FutureBuilder<List<Batch>>(
       future: fetchPhotos(http.Client()),
       builder: (context, snapshot) {
-        print(snapshot);
+
         if (snapshot.hasError) {
           return const Center(
 
             child: Text('An error has occurred!'),
           );
         } else if (snapshot.hasData) {
-          return Container(
-              child: ListView.builder(
-                  itemCount: snapshot.data.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Text('${snapshot.data[index].batch_number}');
-                  }));
+          return Padding(
+              padding: const EdgeInsets.all(8),
+        child: ClipRRect(
+        borderRadius: BorderRadius.circular(118),
+            child: GridView.builder(
+              gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
+              childAspectRatio: MediaQuery.of(context).size.width /
+                  (MediaQuery.of(context).size.height / 4),),
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  height: 100,
+                  margin: new EdgeInsets.symmetric(horizontal: 20.0),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff7c94b6),
+                    image: new DecorationImage(
+                      colorFilter:
+                      ColorFilter.mode(Colors.black.withOpacity(0.2),
+                          BlendMode.dstATop),
+                image: NetworkImage("https://mecaluxmx.cdnwm.com/blog/img/orden-picking-wms.1.19.jpg"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Text(
+                        '${snapshot.data[index].batch_number}',
+                            textAlign:TextAlign.center,
+                      style: TextStyle(color: Colors.white,
+                        fontSize: MediaQuery.of(context).size.width /
+                            (MediaQuery.of(context).size.height / 50),
+                      ),
+
+                    ),
+                  ),
+                );
+              },
+              itemCount: snapshot.data.length,
+            ),
+          ));
+
+
+          // return Container(
+          //     child: ListView.builder(
+          //         itemCount: snapshot.data.length,
+          //         scrollDirection: Axis.horizontal,
+          //         itemBuilder: (BuildContext context, int index) {
+          //           return Text('${snapshot.data[index].batch_number}');
+          //         }));
         } else {
           return const Center(
             child: CircularProgressIndicator(),
