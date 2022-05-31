@@ -1,12 +1,31 @@
+import 'dart:convert';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
+import 'package:http/http.dart' as http;
+import '../../models/consultaBatch.dart';
 
+Future<List<ConsultaBatch>> fetchPhotos(http.Client client) async {
+  final response = await client
+      .get(Uri.parse('http://3.217.149.82/batchjobx/ws/ws_consultaBatch.php?UsersID=2&clientID=1&bitacoraID=13'));
+
+  print(response.body);
+  // Use the compute function to run parsePhotos in a separate isolate.
+  return compute(parsePhotos, response.body);
+}
+
+// A function that converts a response body into a List<Photo>.
+List<ConsultaBatch> parsePhotos(String responseBody) {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+  print('print : $parsed');
+  return parsed.map<ConsultaBatch>((json) => ConsultaBatch.fromJson(json)).toList();
+}
 
 
 class ScannerPage extends StatefulWidget {
@@ -22,7 +41,7 @@ class _ScannerPageState extends State<ScannerPage> {
   @override
   void initState() {
     super.initState();
-    scanBarcodeNormal();
+  //  scanBarcodeNormal();
   }
 
   Future<void> startBarcodeScanStream() async {
@@ -97,7 +116,7 @@ class _ScannerPageState extends State<ScannerPage> {
                       child: Container(
                           width: 400,
                           height: 700,
-                          margin: EdgeInsets.only(top: 50),
+                          margin: EdgeInsets.only(top: 0),
                           child: Text(
                             'SCAN UTILITY',
                             textAlign:TextAlign.center,
@@ -112,17 +131,18 @@ class _ScannerPageState extends State<ScannerPage> {
                         child: Lottie.asset(
                           'assets/json/code3.json',
                           width: 200,
-                          height: 200,
+
                         ),
                       ),
-                         Center(
+                    SingleChildScrollView(
+                           child: Center(
                       child: Container(
-                          width: 400,
-                          height: 700,
-                          margin: EdgeInsets.only(top: 100),
-                          child: _data()
+                            width: 450,
+                            margin: EdgeInsets.only(top: 250),
+                            child: _data()
                       ),
-                    )
+                    ),
+                         )
                   ],
                 ))),
       ),
@@ -132,7 +152,7 @@ class _ScannerPageState extends State<ScannerPage> {
 
   Widget _data() {
               return Container(
-                  alignment: Alignment.center,
+                  alignment: Alignment.topCenter,
                   child: Flex(
                       direction: Axis.vertical,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -140,15 +160,80 @@ class _ScannerPageState extends State<ScannerPage> {
                         ElevatedButton(
                             onPressed: () => scanBarcodeNormal(),
                             child: Text('Scan Again')),
-                        // ElevatedButton(
-                        //     onPressed: () => scanQR(),
-                        //     child: Text('Start QR scan')),
-                        // ElevatedButton(
-                        //     onPressed: () => startBarcodeScanStream(),
-                        //     child: Text('Start barcode scan stream')),
+
                         Text('Scan result : $_scanBarcode\n',
                             style: TextStyle(fontSize: 20,
-                            color: Colors.white))
+                            color: Colors.white)),
+                        _listAddress(),
                       ]));
   }
+
+  //LIST ADRESS
+  Widget _listAddress() {
+    return FutureBuilder<List<ConsultaBatch>>(
+      future: fetchPhotos(http.Client()),
+      builder: (context, snapshot) {
+
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text('An error has occurred!'),
+          );
+        } else if (snapshot.hasData) {
+          return Container(
+            child: Padding(
+                padding: const EdgeInsets.all(1),
+                child: ClipRRect(
+                  child: GridView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    gridDelegate:
+                    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,
+                      childAspectRatio: MediaQuery.of(context).size.width /
+                          (MediaQuery.of(context).size.height / 2),),
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        height: 400,
+                        margin: new EdgeInsets.symmetric(horizontal: 2.0,vertical: 2.0),
+                        decoration: BoxDecoration(
+                          // color: const Color(0xff7c94b6),
+                          color: Colors.black,
+
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: InkWell(
+                            onTap: (){
+                              // Navigator.pushNamed(
+                              //   context,
+                              //   'scanner',
+                              //   arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}'},
+                              // );
+                            },
+                            child: Text(
+                              '${snapshot.data[index].console_group}',
+                              textAlign:TextAlign.center,
+                              style: TextStyle(color: Colors.white,
+                                fontSize: MediaQuery.of(context).size.width /
+                                    (MediaQuery.of(context).size.height / 20),
+                              ),
+
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    itemCount: snapshot.data.length,
+                  ),
+                )),
+          );
+
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
 }
