@@ -151,22 +151,110 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   Widget _data() {
-              return Container(
-                  alignment: Alignment.topCenter,
-                  child: Flex(
-                      direction: Axis.vertical,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ElevatedButton(
-                            onPressed: () => scanBarcodeNormal(),
-                            child: Text('Scan Again')),
+    if(_scanBarcode=="Unknown" ||_scanBarcode=="-1"){
+      return Container(
 
-                        Text('Scan result : $_scanBarcode\n',
-                            style: TextStyle(fontSize: 20,
-                            color: Colors.white)),
-                        _listAddress(),
-                      ]));
+          alignment: Alignment.topCenter,
+          child: Flex(
+              direction: Axis.vertical,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                    onPressed: () => scanBarcodeNormal(),
+                    child: Text('Scan Again')),
+
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: Text('Consolidation Group',
+                      style: TextStyle(fontSize: 20,
+                          color: Colors.white)),
+                ),
+                _listAddress(),
+              ]));
+    }else{
+      return Container(
+          alignment: Alignment.topCenter,
+          child: Flex(
+              direction: Axis.vertical,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                    onPressed: () => scanBarcodeNormal(),
+                    child: Text('Scan Again')),
+
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: Text('"Updated OK"  With The Barcode\n',
+                      style: TextStyle(fontSize: 20,
+                          color: Colors.white)),
+                ),
+                Text('$_scanBarcode\n',
+                    style: TextStyle(fontSize: 20,
+                        color: Colors.white)),
+                Container(
+                  child: Lottie.asset(
+                    'assets/json/check.json',
+                    width: 200,
+
+                  ),
+                ),
+
+              ]));
+    }
+
   }
+// //LIST ADRESS
+//   Widget _batch() {
+//     return Container(
+//             child: Padding(
+//                 padding: const EdgeInsets.all(1),
+//                 child: ClipRRect(
+//                   child: GridView.builder(
+//                     scrollDirection: Axis.vertical,
+//                     shrinkWrap: true,
+//                     gridDelegate:
+//                     SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1,
+//                       childAspectRatio: MediaQuery.of(context).size.width /
+//                           (MediaQuery.of(context).size.height / 4),),
+//                     itemBuilder: (BuildContext context, int index) {
+//                       return Container(
+//                         margin: new EdgeInsets.symmetric(horizontal: 2.0,vertical: 2.0),
+//                         decoration: BoxDecoration(
+//                           // color: const Color(0xff7c94b6),
+//                           color: Colors.black,
+//
+//                         ),
+//                         child: Padding(
+//                           padding: const EdgeInsets.all(10.0),
+//                           child: InkWell(
+//                             onTap: (){
+//                               // Navigator.pushNamed(
+//                               //   context,
+//                               //   'scanner',
+//                               //   arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}'},
+//                               // );
+//                             },
+//
+//                             child: Text(
+//                               'CG: ${_scanBarcode} \n Updated OK',
+//                               textAlign:TextAlign.center,
+//                               style: TextStyle(color: Colors.lightGreen,
+//                                 fontSize: MediaQuery.of(context).size.width /
+//                                     (MediaQuery.of(context).size.height / 20),
+//                               ),
+//
+//                             ),
+//
+//                           ),
+//                         ),
+//                       );
+//                     },
+//
+//                   ),
+//                 )),
+//           );
+//
+//         }
 
   //LIST ADRESS
   Widget _listAddress() {
@@ -189,10 +277,9 @@ class _ScannerPageState extends State<ScannerPage> {
                     gridDelegate:
                     SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,
                       childAspectRatio: MediaQuery.of(context).size.width /
-                          (MediaQuery.of(context).size.height / 2),),
+                          (MediaQuery.of(context).size.height / 4),),
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        height: 400,
                         margin: new EdgeInsets.symmetric(horizontal: 2.0,vertical: 2.0),
                         decoration: BoxDecoration(
                           // color: const Color(0xff7c94b6),
@@ -210,7 +297,7 @@ class _ScannerPageState extends State<ScannerPage> {
                               // );
                             },
                             child: Text(
-                              '${snapshot.data[index].console_group}',
+                              'CG: ${snapshot.data[index].console_group} \n ST: ${snapshot.data[index].station}',
                               textAlign:TextAlign.center,
                               style: TextStyle(color: Colors.white,
                                 fontSize: MediaQuery.of(context).size.width /
@@ -218,6 +305,7 @@ class _ScannerPageState extends State<ScannerPage> {
                               ),
 
                             ),
+
                           ),
                         ),
                       );
