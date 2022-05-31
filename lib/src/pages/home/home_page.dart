@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
@@ -7,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import 'package:uber_clone_flutter/src/models/batch.dart';
 import 'package:uber_clone_flutter/src/pages/home/home_controller.dart';
 import 'package:uber_clone_flutter/src/utils/my_colors.dart';
@@ -14,11 +16,15 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import '../../models/bottom_bar.dart';
 
-Future<List<Batch>> fetchPhotos(http.Client client) async {
+var UsersID;
+var clientID;
+
+Future<List<Batch>> fetchPhotos(http.Client client, String clientID, String UsersID) async {
   final response = await client
-      .get(Uri.parse('http://vossgps.com/batchjobx/ws/ws_consulta_ProductionPick.php?UsersID=2&clientID=1'));
+      .get(Uri.parse('http://vossgps.com/batchjobx/ws/ws_consulta_ProductionPick.php?UsersID=$UsersID&clientID=$clientID'));
 
   print(response.body);
+
   // Use the compute function to run parsePhotos in a separate isolate.
   return compute(parsePhotos, response.body);
 }
@@ -32,7 +38,6 @@ List<Batch> parsePhotos(String responseBody) {
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -42,8 +47,14 @@ class _HomePageState extends State<HomePage> {
   HomeController _con = new HomeController();
 
   void initState() {
+
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _con.init(context, refresh);
+      ProgressDialog _progresDialog = new ProgressDialog(context: context);
+      _progresDialog.show(max: 10, msg: "Waiting");
+      Timer(Duration(seconds: 8), () {
+        _progresDialog.close();
+      });
     });
   }
 
@@ -57,12 +68,15 @@ class _HomePageState extends State<HomePage> {
         .arguments ?? <String, dynamic>{}) as Map;
     print('Los elementos son : $arguments');
     print(arguments['profile']);
+    UsersID = arguments['UsersID'];
+    clientID = arguments['clientID'];
 
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage("https://wallpaper.dog/large/10762816.png"),
+            image: NetworkImage("https://wallpaper.dog/large/10762816.png"
+            ),
             fit: BoxFit.cover,
           ),
         ),
@@ -99,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                   width: 400,
                   height: 700,
                   margin: EdgeInsets.only(top: 150),
-                  child: _listAddress()
+                  child: _listAddress(),
               ),
             )
             //     : Container(),
@@ -174,10 +188,23 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _getLoadingIndicator() {
+    return Padding(
+        child: Container(
+            child: CircularProgressIndicator(
+                strokeWidth: 3
+            ),
+            width: 32,
+            height: 32
+        ),
+        padding: EdgeInsets.only(bottom: 16)
+    );
+  }
+
 //LIST ADRESS
   Widget _listAddress() {
     return FutureBuilder<List<Batch>>(
-      future: fetchPhotos(http.Client()),
+      future: fetchPhotos(http.Client(),clientID,UsersID),
       builder: (context, snapshot) {
 
         if (snapshot.hasError) {
