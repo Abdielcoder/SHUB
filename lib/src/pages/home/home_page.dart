@@ -1,10 +1,12 @@
 
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:lottie/lottie.dart';
 import 'package:uber_clone_flutter/src/models/batch.dart';
 import 'package:uber_clone_flutter/src/pages/home/home_controller.dart';
 import 'package:uber_clone_flutter/src/utils/my_colors.dart';
@@ -34,7 +36,7 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
-enum BottomIcons { Batch, Favorite, Search, Account }
+enum BottomIcons { Batch, Search, Account }
 
 class _HomePageState extends State<HomePage> {
   HomeController _con = new HomeController();
@@ -57,94 +59,117 @@ class _HomePageState extends State<HomePage> {
     print(arguments['profile']);
 
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          bottomIcons == BottomIcons.Batch
-              ? Center(
-            child: Container(
-                width: 400,
-                height: 700,
-                margin: EdgeInsets.only(top: 100),
-                child: _listAddress()
-            ),
-          )
-              : Container(),
-          bottomIcons == BottomIcons.Favorite
-              ? Center(
-            child: Text(
-              "Hi, this is favorite page",
-              style: TextStyle(fontSize: 18),
-            ),
-          )
-              : Container(),
-          bottomIcons == BottomIcons.Search
-              ? Center(
-            child: Text(
-              "Hi, this is search page",
-              style: TextStyle(fontSize: 18),
-            ),
-          )
-              : Container(),
-          bottomIcons == BottomIcons.Account
-              ? Center(
-            child: Text(
-              "Hi, this is account page",
-              style: TextStyle(fontSize: 18),
-            ),
-          )
-              : Container(),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              padding: EdgeInsets.only(left: 24, right: 24, bottom: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  BottomBar(
-                      onPressed: () {
-                        setState(() {
-                          bottomIcons = BottomIcons.Batch;
-                        });
-                      },
-                      bottomIcons:
-                      bottomIcons == BottomIcons.Batch ? true : false,
-                      icons: EvaIcons.layersOutline,
-                      text: "Batch"),
-                  // BottomBar(
-                  //     onPressed: () {
-                  //       setState(() {
-                  //         bottomIcons = BottomIcons.Favorite;
-                  //       });
-                  //     },
-                  //     bottomIcons:
-                  //     bottomIcons == BottomIcons.Favorite ? true : false,
-                  //     icons: EvaIcons.heartOutline,
-                  //     text: "Favorite"),
-                  // BottomBar(
-                  //     onPressed: () {
-                  //       setState(() {
-                  //         bottomIcons = BottomIcons.Search;
-                  //       });
-                  //     },
-                  //     bottomIcons:
-                  //     bottomIcons == BottomIcons.Search ? true : false,
-                  //     icons: EvaIcons.search,
-                  //     text: "Search"),
-                  BottomBar(
-                      onPressed: () {
-                        setState(() {
-                          bottomIcons = BottomIcons.Account;
-                        });
-                      },
-                      bottomIcons:
-                      bottomIcons == BottomIcons.Account ? true : false,
-                      icons: EvaIcons.settingsOutline,
-                      text: "Account"),
-                ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage("https://wallpaper.dog/large/10762816.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+    child: ClipRRect( // make sure we apply clip it properly
+    child: BackdropFilter(
+    filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
+        child: Stack(
+          children: <Widget>[
+            Center(
+              child: Container(
+                  width: 400,
+                  height: 700,
+                  margin: EdgeInsets.only(top: 50),
+                  child: Text(
+                    'BATCH LOG',
+                    textAlign:TextAlign.center,
+                    style: TextStyle(fontSize: 28,
+                    fontFamily: 'Prompt-Italic',
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+                  )
               ),
             ),
-          )
-        ],
+            Container(
+              child: Lottie.asset(
+                'assets/json/batch.json',
+                width: 200,
+                height: 200,
+              ),
+            ),
+            bottomIcons == BottomIcons.Batch
+                ? Center(
+              child: Container(
+                  width: 400,
+                  height: 700,
+                  margin: EdgeInsets.only(top: 150),
+                  child: _listAddress()
+              ),
+            )
+            //     : Container(),
+            // bottomIcons == BottomIcons.Favorite
+            //     ? Center(
+            //   child: Text(
+            //     "Hi, this is favorite page",
+            //     style: TextStyle(fontSize: 18),
+            //   ),
+            // )
+                : Container(),
+            bottomIcons == BottomIcons.Search
+                ? Center(
+              child: Text(
+                "Hi, this is search page",
+                style: TextStyle(fontSize: 18),
+              ),
+            )
+                : Container(),
+            bottomIcons == BottomIcons.Account
+                ? Center(
+              child: Text(
+                "Hi, this is account page",
+                style: TextStyle(fontSize: 18),
+              ),
+            )
+                : Container(),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                padding: EdgeInsets.only(left: 54, right: 24, bottom: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    BottomBar(
+                        onPressed: () {
+                          setState(() {
+                            bottomIcons = BottomIcons.Batch;
+                          });
+                        },
+                        bottomIcons:
+                        bottomIcons == BottomIcons.Batch ? true : false,
+                        icons: EvaIcons.layersOutline,
+                        text: "Batch"),
+                    BottomBar(
+                        onPressed: () {
+                          setState(() {
+                            bottomIcons = BottomIcons.Search;
+                          });
+                        },
+                        bottomIcons:
+                        bottomIcons == BottomIcons.Search ? true : false,
+                        icons: EvaIcons.search,
+                        text: "Search"),
+                    BottomBar(
+                        onPressed: () {
+                          setState(() {
+                            bottomIcons = BottomIcons.Account;
+                          });
+                        },
+                        bottomIcons:
+                        bottomIcons == BottomIcons.Account ? true : false,
+                        icons: EvaIcons.settingsOutline,
+                        text: "Account"),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ))),
       ),
     );
   }
@@ -162,7 +187,7 @@ class _HomePageState extends State<HomePage> {
           );
         } else if (snapshot.hasData) {
           return Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(18),
         child: ClipRRect(
         borderRadius: BorderRadius.circular(118),
             child: GridView.builder(
@@ -186,14 +211,23 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
-                    child: Text(
-                        '${snapshot.data[index].batch_number}',
-                            textAlign:TextAlign.center,
-                      style: TextStyle(color: Colors.white,
-                        fontSize: MediaQuery.of(context).size.width /
-                            (MediaQuery.of(context).size.height / 50),
-                      ),
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(
+                          context,
+                          'scanner',
+                          arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}'},
+                        );
+                      },
+                      child: Text(
+                          '${snapshot.data[index].batch_number}',
+                              textAlign:TextAlign.center,
+                        style: TextStyle(color: Colors.white,
+                          fontSize: MediaQuery.of(context).size.width /
+                              (MediaQuery.of(context).size.height / 50),
+                        ),
 
+                      ),
                     ),
                   ),
                 );
@@ -216,176 +250,6 @@ class _HomePageState extends State<HomePage> {
           );
         }
       },
-    );
-  }
-
-
-
-  Widget _radioSelectorAddress(Batch batch, int index) {
-    //String colorCarBd =batch?.color ?? '';
-    //String colorWHex = "0xFF${colorCarBd}";
-    //int colorCar = int.parse(colorWHex);
-    return InkWell(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 50),
-        child: Column(
-          children: [
-            Row(
-
-              children: [
-
-                // Radio(
-                //
-                //   value: index,
-                //   groupValue: _con.radioValue,
-                //   onChanged:  _con.handleRadioValueChange,
-                //
-                // ),
-                Column(children: <Widget>[
-                  SizedBox(height: 32.0),
-                  GestureDetector(
-                    onTap: () {},
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/img/placac.png'),
-                      radius: 40,
-                      backgroundColor: Colors.grey[200],
-                    ),
-                  )
-                ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 28, bottom: 5),
-                      child: Text(
-                        batch?.batch_number ?? '',
-                        style: TextStyle(
-                            color: MyColors.colorWhite,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 28, bottom: 5),
-                      child: Text(
-                        batch?.number_of_station ?? '',
-                        style: TextStyle(
-                          color: Colors.white54,
-                          fontSize: 12,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8, bottom: 5),
-                      child: Text(
-                        'LINE',
-                        style: TextStyle(
-                            color: MyColors.colorWhite,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8, bottom: 5),
-                      child: Text(
-                        batch?.line1 ?? '',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white54,
-                        ),
-                      ),
-                    ),
-
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 0, left: 8, bottom: 5),
-                      child: Text(
-                        'DATE',
-                        style: TextStyle(
-                            color: MyColors.colorWhite,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 18, bottom: 5),
-                      child: CircleAvatar(
-                        radius: 8,
-                        backgroundColor: Colors.white,
-                        child: Text(
-                          batch?.fecha ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white54,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 0, left: 8, bottom: 5),
-                      child: Text(
-                        'HOUR',
-                        style: TextStyle(
-                            color: MyColors.colorWhite,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8, bottom: 5),
-                      child: Text(
-                        batch?.hora ?? '',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white54,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                // Column(
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //
-                //   children: [
-                //
-                //     Padding(
-                //       padding: const EdgeInsets.only(left: 20,bottom: 5),
-                //       child: _iconGo(cars),
-                //     )
-                //
-                //   ],
-                // ),
-
-              ],
-            ),
-            Divider(
-              color: Colors.grey[400],
-            )
-          ],
-        ),
-      ),
-      // onTap: () => _con.goToAddress(cars),
     );
   }
 

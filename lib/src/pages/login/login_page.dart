@@ -14,7 +14,7 @@ import '../../utils/my_snackbar.dart';
 import '../../utils/shared_pref.dart';
 
 import 'loggin_controller.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -22,13 +22,6 @@ class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
-
-final GoogleSignIn _googleSignIn = GoogleSignIn(
-  scopes: [
-    'email'
-  ]
-);
-
 
 
 class _LoginPageState extends State<LoginPage> {
@@ -52,7 +45,6 @@ class _LoginPageState extends State<LoginPage> {
 //
 
 
-  GoogleSignInAccount _currentUser;
   // PushNotificationsProvider pushNotificationsProvider = new PushNotificationsProvider();
   // UsersProvider usersProvider = new UsersProvider();
   ProgressDialog _progressDialog;
@@ -61,54 +53,6 @@ class _LoginPageState extends State<LoginPage> {
   //GENERETED ALEATORI ID SESSION.
 
   void initState() {
-    int automaticId = DateTime.now().millisecondsSinceEpoch;
-    String automaticIdString = automaticId.toString();
-    print("session id : ${automaticIdString}");
-    // usersProvider.init(context);
-    _progressDialog = ProgressDialog();
-    _googleSignIn.onCurrentUserChanged.listen((account) {
-      try {
-        setState(() {
-          _currentUser = account;
-          print("User Name ${_currentUser.displayName}");
-          print("User Email ${_currentUser.email}");
-          print("User ID ${_currentUser.id}");
-          print("User PhotoUrl ${_currentUser.photoUrl}");
-          //INITIAL DATA FROM SOCIAL LOGIN
-          var userJson = {
-            'id':_currentUser.id,
-            'name': _currentUser.displayName,
-            'lastname':_currentUser.displayName,
-            'email': _currentUser.email,
-            'phone': '',
-            'password': 'null',
-            'session_token': 'JWT ${automaticIdString}',
-            // 'notificationToken':'',
-            'image':_currentUser.photoUrl,
-
-          };
-
-          //SAVE TO SHARED PREFERENCES
-
-          //INSERT INTO DB POSTGRESS
-          //HERE RESPONSE 2 WAYS..
-          //1. INSERT SOCIAL USER
-          //2. DONT INSERT AND RETURN MESSAGE ERROR DUPLICATE ENTRY
-        //  InsertaGoogleBD(_currentUser.email,_currentUser.displayName,_currentUser.displayName,'000','null',_currentUser.photoUrl);
-          //SAVE TOKEN TO DB
-
-        });
-      } catch (e, s) {
-        print(s);
-      }
-
-      //READ USER FROM DB
-      //readDataFromUserDb(_currentUser.email,'null');
-      //VALIATED SOCIAL LOGIN
-
-    });
-
-    _googleSignIn.signInSilently();
     // TODO: implement initState
     super.initState();
     _passwordVisible = false;

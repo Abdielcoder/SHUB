@@ -23,7 +23,7 @@ class _BottomBarState extends State<BottomBar> {
         child: widget.bottomIcons == true
             ? Container(
           decoration: BoxDecoration(
-            color: Colors.indigo.shade100.withOpacity(0.6),
+            color: Colors.white.withOpacity(0.6),
             borderRadius: BorderRadius.circular(30),
           ),
           padding:
@@ -35,14 +35,14 @@ class _BottomBarState extends State<BottomBar> {
                 color: Colors.indigo,
               ),
               SizedBox(
-                width: 8,
+                width: 1,
               ),
               Text(
                 widget.text,
                 style: TextStyle(
                     color: Colors.indigo,
                     fontWeight: FontWeight.bold,
-                    fontSize: 15),
+                    fontSize: 17),
               ),
             ],
           ),

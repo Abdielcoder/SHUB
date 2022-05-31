@@ -2,24 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:uber_clone_flutter/src/pages/home/home_page.dart';
 
 import 'package:uber_clone_flutter/src/pages/login/login_page.dart';
+import 'package:uber_clone_flutter/src/pages/scanner/scanner_page.dart';
 import 'package:uber_clone_flutter/src/pages/splashscreen/splash_screen_page.dart';
 import 'package:uber_clone_flutter/src/utils/my_colors.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
-  print('Handling a background message ${message.messageId}');
-}
+
+
 
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   runApp(MyApp());
 }
 
@@ -51,6 +45,7 @@ class _MyappState extends State<MyApp> {
         'splashScreen':(BuildContext context) => SplashScreenPage(),
         'login':(BuildContext context) => LoginPage(),
         'home':(BuildContext context) => HomePage(),
+        'scanner':(BuildContext context) => ScannerPage(),
       },
       theme: ThemeData(
           primaryColor: MyColors.primaryColor
