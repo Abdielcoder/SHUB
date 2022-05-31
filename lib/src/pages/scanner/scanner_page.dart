@@ -27,6 +27,22 @@ List<ConsultaBatch> parsePhotos(String responseBody) {
   return parsed.map<ConsultaBatch>((json) => ConsultaBatch.fromJson(json)).toList();
 }
 
+Future<List<ConsultaBatch>> updateBatch(http.Client client) async {
+  final response = await client
+      .get(Uri.parse('http://3.217.149.82/batchjobx/ws/ws_actualizarBatch.php?UsersID=2&clientID=1&bitacoraID=13&batchID=463&sts=PENDING'));
+
+  print(response.body);
+  // Use the compute function to run parsePhotos in a separate isolate.
+  return compute(passUpdateBatch, response.body);
+}
+
+// A function that converts a response body into a List<Photo>.
+List<ConsultaBatch> passUpdateBatch(String responseBody) {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+  print('print : $parsed');
+  return parsed.map<ConsultaBatch>((json) => ConsultaBatch.fromJson(json)).toList();
+}
+
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({Key key}) : super(key: key);
@@ -161,7 +177,7 @@ class _ScannerPageState extends State<ScannerPage> {
               children: <Widget>[
                 ElevatedButton(
                     onPressed: () => scanBarcodeNormal(),
-                    child: Text('Scan Again')),
+                    child: Text('SCAN')),
 
                 Container(
                   margin: EdgeInsets.only(top: 20),
@@ -172,6 +188,7 @@ class _ScannerPageState extends State<ScannerPage> {
                 _listAddress(),
               ]));
     }else{
+      _update();
       return Container(
           alignment: Alignment.topCenter,
           child: Flex(
@@ -314,6 +331,28 @@ class _ScannerPageState extends State<ScannerPage> {
                   ),
                 )),
           );
+
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  //LIST ADRESS
+  Widget _update() {
+    return FutureBuilder<List<ConsultaBatch>>(
+      future: updateBatch(http.Client()),
+      builder: (context, snapshot) {
+
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text('An error has occurred!'),
+          );
+        } else if (snapshot.hasData) {
+          return Container();
 
         } else {
           return const Center(

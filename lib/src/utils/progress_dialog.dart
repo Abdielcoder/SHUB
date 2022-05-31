@@ -15,4 +15,11 @@ class MyProgressDialog {
 
   }
 
-}
+  static void hide(BuildContext context, String text, bool state)async {
+    if (context == null)
+      return;
+    final ProgressDialog pr = ProgressDialog(context: context);
+      pr.close();
+    }
+
+  }
