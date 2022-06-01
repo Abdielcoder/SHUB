@@ -39,9 +39,9 @@ List<ConsultaBatch> parsePhotos(String responseBody) {
   return parsed.map<ConsultaBatch>((json) => ConsultaBatch.fromJson(json)).toList();
 }
 
-Future<List<ConsultaBatch>> updateBatch(http.Client client, String UsersID, String clientID, String ID, String batchID  ) async {
+Future<List<ConsultaBatch>> updateBatch(http.Client client, String UsersID, String clientID, String ID,String barcode, String batchID  ) async {
   final response = await client
-      .get(Uri.parse('http://3.217.149.82/batchjobx/ws/ws_actualizarBatch.php?UsersID=$UsersID&clientID=$clientID&bitacoraID=$ID&batchID=$batchID&sts=OK'));
+      .get(Uri.parse('http://3.217.149.82/batchjobx/ws/ws_actualizarBatch.php?UsersID=$UsersID&clientID=$clientID&bitacoraID=$ID&console_group=$barcode&batchID=$batchID&sts=369'));
 
   print(response.body);
   // Use the compute function to run parsePhotos in a separate isolate.
@@ -208,7 +208,7 @@ class _ScannerPageState extends State<ScannerPage> {
                       style: TextStyle(fontSize: 20,
                           color: Colors.white)),
                 ),
-                _listAddress(),
+                _yelloBox(),
               ]));
     }else{
       return Container(
@@ -501,9 +501,9 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   //LIST ADRESS
-  Widget _update() {
+  Widget _update(String UsersID,String clientID , String ID,String console_group,String batchID ) {
     return FutureBuilder<List<ConsultaBatch>>(
-      future: updateBatch(http.Client(),UsersID,clientID,ID,batchID),
+      future: updateBatch(http.Client(),UsersID,clientID,ID,console_group,batchID),
       builder: (context, snapshot) {
 
         if (snapshot.hasError) {
@@ -523,7 +523,7 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   bool _whateverLogicNeeded(String console ,String scanner) {
-
+   //
     try{
       scanSelected.add(scanner);
       pref.setStringList('scan', scanSelected);
@@ -531,14 +531,15 @@ class _ScannerPageState extends State<ScannerPage> {
     }catch(e){
 
     }
-        if(scanSelected.contains(console)){
-          print('scaned #### : $scanSelected');
-          return true;
-        }else{
-          return false;
-        }
+    if(scanSelected.contains(console)){
+      print('scaned #### : $scanSelected');
+      _update(UsersID, clientID,ID,scanner,batchID);
+      return true;
+    }else{
+      return false;
+    }
 
-      }
+  }
 
 
   // bool _listScan(String scanner ,String item) {
