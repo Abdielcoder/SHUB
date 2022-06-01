@@ -11,6 +11,7 @@ class ConsultaBatch{
   String console_group;
   String cg_barcode;
   String bd_total_line_count;
+  int quantity;
   List<ConsultaBatch> toList = [];
 
   ConsultaBatch({
@@ -19,6 +20,7 @@ class ConsultaBatch{
     this.number_station,
     this.console_group,
     this.cg_barcode,
+    this.quantity,
     this.bd_total_line_count,
   });
 
@@ -29,6 +31,7 @@ class ConsultaBatch{
     console_group: json["console_group"],
     cg_barcode: json["cg_barcode"],
     bd_total_line_count: json["bd_total_line_count"],
+    quantity: json["quantity"],
   );
 
   ConsultaBatch.fromJsonList(List<dynamic> jsonList) {
@@ -46,5 +49,6 @@ class ConsultaBatch{
     "console_group": console_group,
     "cg_barcode": cg_barcode,
     "bd_total_line_count": bd_total_line_count,
+    "quantity": quantity,
   };
 }

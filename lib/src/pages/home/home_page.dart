@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
     print(arguments['profile']);
     UsersID = arguments['UsersID'];
     clientID = arguments['clientID'];
-
+    print('ARGUMENTS HOME SCREEN : $arguments');
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -116,14 +116,7 @@ class _HomePageState extends State<HomePage> {
                   child: _listAddress(),
               ),
             )
-            //     : Container(),
-            // bottomIcons == BottomIcons.Favorite
-            //     ? Center(
-            //   child: Text(
-            //     "Hi, this is favorite page",
-            //     style: TextStyle(fontSize: 18),
-            //   ),
-            // )
+
                 : Container(),
             bottomIcons == BottomIcons.Search
                 ? Center(
@@ -243,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.pushNamed(
                           context,
                           'scanner',
-                          arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}'},
+                          arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}','UsersID':UsersID, 'clientID':clientID},
                         );
                       },
                       child: Text(
