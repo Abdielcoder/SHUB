@@ -38,7 +38,7 @@ class _MyappState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title:'Voitu',
+      title:'',
       debugShowCheckedModeBanner: false,
       initialRoute: 'login',
       routes: {

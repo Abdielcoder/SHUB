@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_mobile_vision/flutter_mobile_vision.dart';
 import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,13 +69,32 @@ class ScannerPage extends StatefulWidget {
 class _ScannerPageState extends State<ScannerPage> {
   String _scanBarcode = 'Unknown';
 
+ bool isInitilized = false;
+
   @override
   void initState() {
+    FlutterMobileVision.start().then((value){
+      isInitilized = true;
+    });
     super.initState();
   //  scanBarcodeNormal();
+  }
 
+  _startScan()async{
 
-
+    List<Barcode> barcodes = [];
+    try{
+      barcodes = await FlutterMobileVision.scan(
+        waitTap: true,
+        fps: 5,
+        multiple: true,
+      );
+      for(Barcode text in barcodes){
+        print('Values *OCR* ${text.displayValue}');
+      }
+    }catch(e){
+    print('El error es : $e');
+    }
   }
 
   Future<void> startBarcodeScanStream() async {
@@ -199,7 +219,8 @@ class _ScannerPageState extends State<ScannerPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 ElevatedButton(
-                    onPressed: () => scanBarcodeNormal(),
+                  //Teseo
+                    onPressed: () => _startScan(),
                     child: Text('SCAN')),
 
                 Container(

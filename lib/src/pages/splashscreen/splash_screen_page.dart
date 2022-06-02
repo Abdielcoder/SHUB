@@ -55,7 +55,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
               // CircularProgressIndicator(
               //   color: Colors.white,
               // ),
-              Text("Voitu",
+              Text("Shub",
             style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 15,
