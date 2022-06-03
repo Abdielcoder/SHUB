@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/consultaBatch.dart';
 import '../../utils/shared_pref.dart';
+import 'dart:convert' as convert;
 
 var UsersID;
 var clientID;
@@ -24,6 +25,8 @@ var consoleGroup;
 List<String> scanSelected = [];
 SharedPreferences pref;
 Barcode text;
+int barnumber;
+bool insection;
 
 Future<List<ConsultaBatch>> fetchPhotos(http.Client client, String UsersID, String clientID, String ID ) async {
   final response = await client
@@ -40,6 +43,16 @@ List<ConsultaBatch> parsePhotos(String responseBody) {
   print('print : $parsed');
   return parsed.map<ConsultaBatch>((json) => ConsultaBatch.fromJson(json)).toList();
 }
+
+///
+///
+
+
+
+
+
+///
+///
 
 Future<List<ConsultaBatch>> updateBatch(http.Client client, String UsersID, String clientID, String ID,String barcode, String batchID  ) async {
   final response = await client
@@ -72,7 +85,7 @@ class ScannerPage extends StatefulWidget {
 class _ScannerPageState extends State<ScannerPage> {
   String _scanBarcode = 'Unknown';
 
- bool isInitilized = false;
+  bool isInitilized = false;
 
   @override
   void initState() {
@@ -80,11 +93,10 @@ class _ScannerPageState extends State<ScannerPage> {
       isInitilized = true;
     });
     super.initState();
-  //  scanBarcodeNormal();
+    //  scanBarcodeNormal();
   }
 
   _startScan()async{
-
     List<Barcode> barcodes = [];
     try{
       final player = AudioCache();
@@ -95,12 +107,18 @@ class _ScannerPageState extends State<ScannerPage> {
         multiple: true,
       );
       player.play('sounds/beep.mp3');
-      _dialogSucces();
+
       for( text in barcodes){
-        print('Values *OCR* ${text.displayValue}');
+        print('inset *OCR* ${text.displayValue}');
+        _scanBarcode = "Tengo data";
       }
+
+      setState(() {});
+      _yelloBox();
+      getScanner(text.displayValue,ID);
+
     }catch(e){
-    print('El error es : $e');
+      print('El error es : $e');
     }
   }
 
@@ -193,22 +211,22 @@ class _ScannerPageState extends State<ScannerPage> {
                           )
                       ),
                     ),
-                      Container(
-                        child: Lottie.asset(
-                          'assets/json/code3.json',
-                          width: 200,
+                    Container(
+                      child: Lottie.asset(
+                        'assets/json/code3.json',
+                        width: 200,
 
-                        ),
                       ),
+                    ),
                     SingleChildScrollView(
-                           child: Center(
-                      child: Container(
+                      child: Center(
+                        child: Container(
                             width: 450,
                             margin: EdgeInsets.only(top: 250),
                             child: _data()
+                        ),
                       ),
-                    ),
-                         )
+                    )
                   ],
                 ))),
       ),
@@ -228,7 +246,7 @@ class _ScannerPageState extends State<ScannerPage> {
                 ElevatedButton(
                   //Teseo
                     onPressed: () => _startScan(),
-                    child: Text('SCAN')),
+                    child: Text('SCAN1')),
 
                 Container(
                   margin: EdgeInsets.only(top: 20),
@@ -236,7 +254,7 @@ class _ScannerPageState extends State<ScannerPage> {
                       style: TextStyle(fontSize: 20,
                           color: Colors.white)),
                 ),
-                _yelloBox(),
+                _listAddress(),
               ]));
     }else{
       return Container(
@@ -247,8 +265,8 @@ class _ScannerPageState extends State<ScannerPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 ElevatedButton(
-                    onPressed: () => scanBarcodeNormal(),
-                    child: Text('SCAN')),
+                    onPressed: () => _startScan(),
+                    child: Text('SCAN2')),
 
                 Container(
                   margin: EdgeInsets.only(top: 20),
@@ -441,7 +459,6 @@ class _ScannerPageState extends State<ScannerPage> {
                       consoleGroup = snapshot.data[index].console_group;
 
                       final condition =  _whateverLogicNeeded(consoleGroup,text.displayValue);
-
                       return condition
                           ?Container(
                         margin: new EdgeInsets.symmetric(horizontal: 2.0,vertical: 2.0),
@@ -478,38 +495,38 @@ class _ScannerPageState extends State<ScannerPage> {
                         ),
                       )
                           :Container(
-                      margin: new EdgeInsets.symmetric(horizontal: 2.0,vertical: 2.0),
-                      decoration: BoxDecoration(
-                      // color: const Color(0xff7c94b6),
-                      color: Colors.black,
+                        margin: new EdgeInsets.symmetric(horizontal: 2.0,vertical: 2.0),
+                        decoration: BoxDecoration(
+                          // color: const Color(0xff7c94b6),
+                          color: Colors.black,
 
-                      ),
-                      child: Padding(
+                        ),
+                        child: Padding(
 
-                      padding: const EdgeInsets.all(10.0),
-                      child: InkWell(
-                      onTap: (){
-                      // Navigator.pushNamed(
-                      //   context,
-                      //   'scanner',
-                      //   arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}'},
-                      // );
-                      },
+                          padding: const EdgeInsets.all(10.0),
+                          child: InkWell(
+                            onTap: (){
+                              // Navigator.pushNamed(
+                              //   context,
+                              //   'scanner',
+                              //   arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}'},
+                              // );
+                            },
 
 
-                      child: Text(
+                            child: Text(
 
-                      'CG: ${snapshot.data[index].console_group} \n ST: ${snapshot.data[index].station}\n BATCH ID:$batchID',
-                      textAlign:TextAlign.center,
-                      style: TextStyle(color: Colors.white,
-                      fontSize: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height / 20),
-                      ),
+                              'CG: ${snapshot.data[index].console_group} \n ST: ${snapshot.data[index].station}\n BATCH ID:$batchID',
+                              textAlign:TextAlign.center,
+                              style: TextStyle(color: Colors.white,
+                                fontSize: MediaQuery.of(context).size.width /
+                                    (MediaQuery.of(context).size.height / 20),
+                              ),
 
-                      ),
+                            ),
 
-                      ),
-                      ),
+                          ),
+                        ),
                       );
 
 
@@ -551,7 +568,7 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   bool _whateverLogicNeeded(String console ,String scanner) {
-   //
+    //
     try{
       scanSelected.add(scanner);
       pref.setStringList('scan', scanSelected);
@@ -559,72 +576,158 @@ class _ScannerPageState extends State<ScannerPage> {
     }catch(e){
 
     }
+
     if(scanSelected.contains(console)){
+
       print('scaned #### : $scanSelected');
       _update(UsersID, clientID,ID,scanner,batchID);
+
+      print('vali #### true');
       return true;
     }else{
+
+     // barnumber = 1;
+     print('vali #### false');
       return false;
     }
 
   }
 
+  void _dialogFail() {
+    EasyDialog(
+        closeButton: true,
+        width: 280,
+        height: 500,
+        contentPadding:
+        EdgeInsets.only(top: 1.0),
+        // Needed for the button design
+        contentList: [
+          Container(
+            child: Lottie.asset(
+              'assets/json/fail.json',
+              width: 200,
+              height: 200,
+            ),
+          ),
+          Container(
+            child: Text(
+              "Fail!! we not found the station",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.redAccent,),
+              textScaleFactor: 2.8,
+            ),
+          ),
+          Container(
+            child: Text(
+              "\n Scan again or check if information  are correct \n",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.black87),
+              textScaleFactor: 1.7,
+            ),
+          ),
+
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: Colors.greenAccent,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0))),
+            child: FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                "Okay",
+                style: TextStyle(color: Colors.black87),
+                textScaleFactor: 1.3,
+              ),
+            ),
+          ),
+        ]).show(context);
+  }
+
   void _dialogSucces() {
+    // insection= false;
     EasyDialog(
         closeButton: true,
         width: 280,
         height: 500,
         contentPadding:
         EdgeInsets.only(top: 1.0), // Needed for the button design
-    contentList: [
-      Container(
-        child: Lottie.asset(
-      'assets/json/success2.json',
-      width: 200,
-      height: 200,
-    ),
-      ),
-      Container(
-        child: Text(
-          "Success!! we found the station",
-          style: TextStyle(fontWeight: FontWeight.bold,color: Colors.teal),
-          textScaleFactor: 1.2,
-        ),
-      ),
-      Container(
-        child: Text(
-          "Station",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[900]),
-          textScaleFactor: 4.2,
-        ),
-      ),
-      Container(
-        child: Text(
-          "5",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[900]),
-          textScaleFactor: 8.2,
-        ),
-      ),
-    Container(
-    width: double.infinity,
-    decoration: BoxDecoration(
-    color: Colors.greenAccent,
-    borderRadius: BorderRadius.only(
-    bottomLeft: Radius.circular(10.0),
-    bottomRight: Radius.circular(10.0))),
-    child: FlatButton(
-    onPressed: () {
-    Navigator.of(context).pop();
-    },
-    child: Text(
-    "Okay",
-    style: TextStyle(color: Colors.black87),
-    textScaleFactor: 1.3,
-    ),
-    ),
-    ),
-    ]).show(context);
+        contentList: [
+          Container(
+            child: Lottie.asset(
+              'assets/json/success2.json',
+              width: 200,
+              height: 200,
+            ),
+          ),
+          Container(
+            child: Text(
+              "Success!! we found the station",
+              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.teal),
+              textScaleFactor: 1.2,
+            ),
+          ),
+          Container(
+            child: Text(
+              "Station",
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[900]),
+              textScaleFactor: 4.2,
+            ),
+          ),
+          Container(
+            child: Text(
+              "5",
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[900]),
+              textScaleFactor: 8.2,
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: Colors.greenAccent,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0))),
+            child: FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                "Okay",
+                style: TextStyle(color: Colors.black87),
+                textScaleFactor: 1.3,
+              ),
+            ),
+          ),
+        ]).show(context);
   }
 
+    Future<List<ConsultaBatch>> getScanner(String scanner, String bitacora) async {
+    print('wsbarcode $scanner ande the bitacora $bitacora');
+
+    var url = 'http://3.217.149.82/batchjobx/ws/ws_valida_scanner.php?scanner=$scanner&bitacora=$bitacora';
+    print(url);
+    // Await the http get response, then decode the json-formatted response.
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      var scanws = jsonResponse['SCAN'];
+
+      print('wsbarcoded ### $scanws');
+      if(scanws == 'SCAN SUCCESS'){
+        _dialogSucces();
+      }else{
+        _dialogFail();
+      }
+
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
 
 }
