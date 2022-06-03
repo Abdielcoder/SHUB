@@ -55,6 +55,7 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   easy_dialog: ^1.1.0
   flutter_mobile_vision: ^0.1.3
+  audioplayers: ^0.20.1
 
 
 
@@ -102,6 +103,7 @@ flutter:
     - assets/json/
     - assets/icons/
     - assets/images/
+    - assets/sounds/beep.mp3
   fonts:
     - family: NimbusSans
       fonts:

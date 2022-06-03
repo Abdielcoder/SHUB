@@ -402,6 +402,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
 }
 
 class InputWithIcon extends StatefulWidget {
@@ -522,4 +523,7 @@ class FadeAnimation extends StatelessWidget {
           ),
     );
   }
+
+
+
 }

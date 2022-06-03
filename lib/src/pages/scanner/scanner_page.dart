@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:ui';
-
+import 'package:easy_dialog/easy_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -22,7 +23,7 @@ var batchID;
 var consoleGroup;
 List<String> scanSelected = [];
 SharedPreferences pref;
-
+Barcode text;
 
 Future<List<ConsultaBatch>> fetchPhotos(http.Client client, String UsersID, String clientID, String ID ) async {
   final response = await client
@@ -59,8 +60,10 @@ List<ConsultaBatch> passUpdateBatch(String responseBody) {
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({Key key}) : super(key: key);
+  static AudioCache player = AudioCache();
   static Future init() async {
     pref = await SharedPreferences.getInstance();
+
   }
   @override
   _ScannerPageState createState() => _ScannerPageState();
@@ -84,12 +87,16 @@ class _ScannerPageState extends State<ScannerPage> {
 
     List<Barcode> barcodes = [];
     try{
+      final player = AudioCache();
+      setState(() {});
       barcodes = await FlutterMobileVision.scan(
         waitTap: true,
         fps: 5,
         multiple: true,
       );
-      for(Barcode text in barcodes){
+      player.play('sounds/beep.mp3');
+      _dialogSucces();
+      for( text in barcodes){
         print('Values *OCR* ${text.displayValue}');
       }
     }catch(e){
@@ -433,7 +440,7 @@ class _ScannerPageState extends State<ScannerPage> {
                       batchID =snapshot.data[index].ID;
                       consoleGroup = snapshot.data[index].console_group;
 
-                      final condition =  _whateverLogicNeeded(consoleGroup,_scanBarcode);
+                      final condition =  _whateverLogicNeeded(consoleGroup,text.displayValue);
 
                       return condition
                           ?Container(
@@ -562,26 +569,62 @@ class _ScannerPageState extends State<ScannerPage> {
 
   }
 
+  void _dialogSucces() {
+    EasyDialog(
+        closeButton: true,
+        width: 280,
+        height: 500,
+        contentPadding:
+        EdgeInsets.only(top: 1.0), // Needed for the button design
+    contentList: [
+      Container(
+        child: Lottie.asset(
+      'assets/json/success2.json',
+      width: 200,
+      height: 200,
+    ),
+      ),
+      Container(
+        child: Text(
+          "Success!! we found the station",
+          style: TextStyle(fontWeight: FontWeight.bold,color: Colors.teal),
+          textScaleFactor: 1.2,
+        ),
+      ),
+      Container(
+        child: Text(
+          "Station",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[900]),
+          textScaleFactor: 4.2,
+        ),
+      ),
+      Container(
+        child: Text(
+          "5",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[900]),
+          textScaleFactor: 8.2,
+        ),
+      ),
+    Container(
+    width: double.infinity,
+    decoration: BoxDecoration(
+    color: Colors.greenAccent,
+    borderRadius: BorderRadius.only(
+    bottomLeft: Radius.circular(10.0),
+    bottomRight: Radius.circular(10.0))),
+    child: FlatButton(
+    onPressed: () {
+    Navigator.of(context).pop();
+    },
+    child: Text(
+    "Okay",
+    style: TextStyle(color: Colors.black87),
+    textScaleFactor: 1.3,
+    ),
+    ),
+    ),
+    ]).show(context);
+  }
 
-  // bool _listScan(String scanner ,String item) {
-  //
-  //   if(scanner == item){
-  //     return true;
-  //   }else{
-  //     return false;
-  //   }
-  // }
-
-  // void addItem(String scanner) async{
-  //
-  //   //scanSelected.add(scanner);
-  //  // !scanSelected.contains(scanner) ?? scanSelected.add(scanner);
-  //  // print('scaned #### : $scanSelected');
-  //
-  //  // pref.setStringList('scan', scanSelected);
-  //   // List StringListval = pref.getStringList('scan') ?? [];
-  //   // print('valor string : $StringListval');
-  //
-  // }
 
 }
