@@ -85,34 +85,31 @@ class _HomePageState extends State<HomePage> {
     filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
         child: Stack(
           children: <Widget>[
-            Center(
-              child: Container(
-                  width: 400,
-                  height: 700,
+
+              Container(
+                alignment:Alignment.topCenter,
                   margin: EdgeInsets.only(top: 50),
                   child: Text(
                     'BATCH LOG',
-                    textAlign:TextAlign.center,
                     style: TextStyle(fontSize: 28,
                     fontFamily: 'Prompt-Italic',
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
                   )
-              ),
+
             ),
             Container(
+              margin: EdgeInsets.only(top: 20),
               child: Lottie.asset(
                 'assets/json/batch.json',
-                width: 200,
-                height: 200,
+                width: 120,
+                height: 120,
               ),
             ),
             bottomIcons == BottomIcons.Batch
                 ? Center(
               child: Container(
-                  width: 400,
-                  height: 700,
-                  margin: EdgeInsets.only(top: 150),
+                  margin: EdgeInsets.only(top: 70),
                   child: _listAddress(),
               ),
             )
@@ -181,18 +178,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _getLoadingIndicator() {
-    return Padding(
-        child: Container(
-            child: CircularProgressIndicator(
-                strokeWidth: 3
-            ),
-            width: 32,
-            height: 32
-        ),
-        padding: EdgeInsets.only(bottom: 16)
-    );
-  }
 
 //LIST ADRESS
   Widget _listAddress() {
@@ -207,9 +192,9 @@ class _HomePageState extends State<HomePage> {
           );
         } else if (snapshot.hasData) {
           return Padding(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.all(30),
         child: ClipRRect(
-        borderRadius: BorderRadius.circular(118),
+        borderRadius: BorderRadius.circular(120),
             child: GridView.builder(
               gridDelegate:
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
@@ -217,17 +202,16 @@ class _HomePageState extends State<HomePage> {
                   (MediaQuery.of(context).size.height / 4),),
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  height: 100,
-                  margin: new EdgeInsets.symmetric(horizontal: 20.0),
+                  margin: new EdgeInsets.only(right: 10,top: 10),
                   decoration: BoxDecoration(
-                    color: const Color(0xff7c94b6),
-                    image: new DecorationImage(
-                      colorFilter:
-                      ColorFilter.mode(Colors.black.withOpacity(0.2),
-                          BlendMode.dstATop),
-                image: NetworkImage("https://mecaluxmx.cdnwm.com/blog/img/orden-picking-wms.1.19.jpg"),
-                      fit: BoxFit.cover,
-                    ),
+                    color: Colors.black87,
+                //     image: new DecorationImage(
+                //       colorFilter:
+                //       ColorFilter.mode(Colors.black.withOpacity(0.2),
+                //           BlendMode.dstATop),
+                // image: NetworkImage("https://mecaluxmx.cdnwm.com/blog/img/orden-picking-wms.1.19.jpg"),
+                //       fit: BoxFit.cover,
+                //     ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
@@ -235,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                       onTap: (){
                         Navigator.pushNamed(
                           context,
-                          'scanner',
+                          'scannerPage',
                           arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}','UsersID':UsersID, 'clientID':clientID},
                         );
                       },

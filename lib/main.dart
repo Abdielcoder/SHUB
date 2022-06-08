@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uber_clone_flutter/src/pages/home/home_page.dart';
 
 import 'package:uber_clone_flutter/src/pages/login/login_page.dart';
+import 'package:uber_clone_flutter/src/pages/scanner/numberscanner/camera_screen.dart';
 import 'package:uber_clone_flutter/src/pages/scanner/scanner_page.dart';
 import 'package:uber_clone_flutter/src/pages/splashscreen/splash_screen_page.dart';
 import 'package:uber_clone_flutter/src/utils/my_colors.dart';
@@ -45,7 +46,8 @@ class _MyappState extends State<MyApp> {
         'splashScreen':(BuildContext context) => SplashScreenPage(),
         'login':(BuildContext context) => LoginPage(),
         'home':(BuildContext context) => HomePage(),
-        'scanner':(BuildContext context) => ScannerPage(),
+        'scannerPage':(BuildContext context) => ScannerPage(),
+        'scanner':(BuildContext context) => ExamplePage(),
       },
       theme: ThemeData(
           primaryColor: MyColors.primaryColor

@@ -22,6 +22,7 @@ var ID;
 var batch_number;
 var batchID;
 var consoleGroup;
+var station;
 List<String> scanSelected = [];
 SharedPreferences pref;
 Barcode text;
@@ -73,7 +74,7 @@ List<ConsultaBatch> passUpdateBatch(String responseBody) {
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({Key key}) : super(key: key);
-  static AudioCache player = AudioCache();
+
   static Future init() async {
     pref = await SharedPreferences.getInstance();
 
@@ -106,7 +107,7 @@ class _ScannerPageState extends State<ScannerPage> {
         fps: 5,
         multiple: true,
       );
-      player.play('sounds/beep.mp3');
+
 
       for( text in barcodes){
         print('inset *OCR* ${text.displayValue}');
@@ -115,7 +116,7 @@ class _ScannerPageState extends State<ScannerPage> {
 
       setState(() {});
       _yelloBox();
-      getScanner(text.displayValue,ID);
+      getScanner(text.displayValue,ID,station);
 
     }catch(e){
       print('El error es : $e');
@@ -196,11 +197,10 @@ class _ScannerPageState extends State<ScannerPage> {
                 filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
                 child: Stack(
                   children: <Widget>[
-                    Center(
-                      child: Container(
-                          width: 400,
-                          height: 700,
-                          margin: EdgeInsets.only(top: 0),
+
+                       Container(
+                         alignment: Alignment.topCenter,
+                          margin: EdgeInsets.only(top: 50),
                           child: Text(
                             'SCAN UTILITY',
                             textAlign:TextAlign.center,
@@ -209,20 +209,21 @@ class _ScannerPageState extends State<ScannerPage> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           )
-                      ),
                     ),
                     Container(
+                      margin: EdgeInsets.only(top: 30),
+                      alignment: Alignment.topLeft,
                       child: Lottie.asset(
                         'assets/json/code3.json',
-                        width: 200,
+                        width: 120,
 
                       ),
                     ),
                     SingleChildScrollView(
                       child: Center(
                         child: Container(
-                            width: 450,
-                            margin: EdgeInsets.only(top: 250),
+                            width: 300,
+                            margin: EdgeInsets.only(top: 150),
                             child: _data()
                         ),
                       ),
@@ -245,8 +246,20 @@ class _ScannerPageState extends State<ScannerPage> {
               children: <Widget>[
                 ElevatedButton(
                   //Teseo
-                    onPressed: () => _startScan(),
-                    child: Text('SCAN1')),
+                    onPressed: (){
+      Navigator.pushNamed(
+      context,
+      'scanner',
+      arguments: {'batch_number':'$batch_number','ID':'$ID','UsersID':UsersID, 'clientID':clientID},
+      );
+      },
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.black87,
+                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        textStyle: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold)),
+                    child: Text('SCAN')),
 
                 Container(
                   margin: EdgeInsets.only(top: 20),
@@ -265,8 +278,21 @@ class _ScannerPageState extends State<ScannerPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 ElevatedButton(
-                    onPressed: () => _startScan(),
-                    child: Text('SCAN2')),
+                  //Teseo
+                    onPressed: (){
+      Navigator.pushNamed(
+      context,
+      'scanner',
+      arguments: {'batch_number':'$batch_number','ID':'$ID','UsersID':UsersID, 'clientID':clientID},
+      );
+      },
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.black87,
+                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        textStyle: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold)),
+                    child: Text('SCAN')),
 
                 Container(
                   margin: EdgeInsets.only(top: 20),
@@ -276,90 +302,11 @@ class _ScannerPageState extends State<ScannerPage> {
                 ),
                 _yelloBox(),
               ]));
-      // _update();
-      // return Container(
-      //     alignment: Alignment.topCenter,
-      //     child: Flex(
-      //         direction: Axis.vertical,
-      //         mainAxisAlignment: MainAxisAlignment.center,
-      //         children: <Widget>[
-      //           ElevatedButton(
-      //               onPressed: () => scanBarcodeNormal(),
-      //               child: Text('Scan Again')),
-      //
-      //           Container(
-      //             margin: EdgeInsets.only(top: 20),
-      //             child: Text('"Updated OK"  With The Barcode\n',
-      //                 style: TextStyle(fontSize: 20,
-      //                     color: Colors.white)),
-      //           ),
-      //           Text('$_scanBarcode\n',
-      //               style: TextStyle(fontSize: 20,
-      //                   color: Colors.white)),
-      //           Container(
-      //             child: Lottie.asset(
-      //               'assets/json/check.json',
-      //               width: 200,
-      //
-      //             ),
-      //           ),
-      //
-      //         ]));
+
     }
 
   }
-// //LIST ADRESS
-//   Widget _batch() {
-//     return Container(
-//             child: Padding(
-//                 padding: const EdgeInsets.all(1),
-//                 child: ClipRRect(
-//                   child: GridView.builder(
-//                     scrollDirection: Axis.vertical,
-//                     shrinkWrap: true,
-//                     gridDelegate:
-//                     SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1,
-//                       childAspectRatio: MediaQuery.of(context).size.width /
-//                           (MediaQuery.of(context).size.height / 4),),
-//                     itemBuilder: (BuildContext context, int index) {
-//                       return Container(
-//                         margin: new EdgeInsets.symmetric(horizontal: 2.0,vertical: 2.0),
-//                         decoration: BoxDecoration(
-//                           // color: const Color(0xff7c94b6),
-//                           color: Colors.black,
-//
-//                         ),
-//                         child: Padding(
-//                           padding: const EdgeInsets.all(10.0),
-//                           child: InkWell(
-//                             onTap: (){
-//                               // Navigator.pushNamed(
-//                               //   context,
-//                               //   'scanner',
-//                               //   arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}'},
-//                               // );
-//                             },
-//
-//                             child: Text(
-//                               'CG: ${_scanBarcode} \n Updated OK',
-//                               textAlign:TextAlign.center,
-//                               style: TextStyle(color: Colors.lightGreen,
-//                                 fontSize: MediaQuery.of(context).size.width /
-//                                     (MediaQuery.of(context).size.height / 20),
-//                               ),
-//
-//                             ),
-//
-//                           ),
-//                         ),
-//                       );
-//                     },
-//
-//                   ),
-//                 )),
-//           );
-//
-//         }
+
 
   //LIST ADRESS
   Widget _listAddress() {
@@ -380,9 +327,9 @@ class _ScannerPageState extends State<ScannerPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     gridDelegate:
-                    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,
+                    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
                       childAspectRatio: MediaQuery.of(context).size.width /
-                          (MediaQuery.of(context).size.height / 4),),
+                          (MediaQuery.of(context).size.height / 2),),
                     itemBuilder: (BuildContext context, int index) {
                       batchID =snapshot.data[index].ID;
 
@@ -403,15 +350,17 @@ class _ScannerPageState extends State<ScannerPage> {
                               //   arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}'},
                               // );
                             },
-                            child: Text(
 
-                              'CG: ${snapshot.data[index].console_group} \n ST: ${snapshot.data[index].station}\n BATCH ID:$batchID}',
-                              textAlign:TextAlign.center,
-                              style: TextStyle(color: Colors.white,
-                                fontSize: MediaQuery.of(context).size.width /
-                                    (MediaQuery.of(context).size.height / 20),
+                            child: Container(
+                              child: Text(
+                                '${snapshot.data[index].console_group} \n\n ${snapshot.data[index].station}',
+                                textAlign:TextAlign.center,
+                                style: TextStyle(color: Colors.white,
+                                  fontSize: MediaQuery.of(context).size.width /
+                                      (MediaQuery.of(context).size.height / 33),
+                                ),
+
                               ),
-
                             ),
 
                           ),
@@ -451,13 +400,14 @@ class _ScannerPageState extends State<ScannerPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     gridDelegate:
-                    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,
+                    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
                       childAspectRatio: MediaQuery.of(context).size.width /
-                          (MediaQuery.of(context).size.height / 3),),
+                          (MediaQuery.of(context).size.height / 2),),
                     itemBuilder: (BuildContext context, int index) {
                       batchID =snapshot.data[index].ID;
                       consoleGroup = snapshot.data[index].console_group;
-
+                      station = snapshot.data[index].station;
+                      print('WsBenjamin 4 $station');
                       final condition =  _whateverLogicNeeded(consoleGroup,text.displayValue);
                       return condition
                           ?Container(
@@ -468,7 +418,6 @@ class _ScannerPageState extends State<ScannerPage> {
 
                         ),
                         child: Padding(
-
                           padding: const EdgeInsets.all(10.0),
                           child: InkWell(
                             onTap: (){
@@ -479,14 +428,13 @@ class _ScannerPageState extends State<ScannerPage> {
                               // );
                             },
 
-
                             child: Text(
 
-                              'CG: ${snapshot.data[index].console_group} \n ST: ${snapshot.data[index].station}\n BATCH ID:$batchID',
+                              '${snapshot.data[index].console_group} \n\n ${snapshot.data[index].station}',
                               textAlign:TextAlign.center,
                               style: TextStyle(color: Colors.white,
                                 fontSize: MediaQuery.of(context).size.width /
-                                    (MediaQuery.of(context).size.height / 20),
+                                    (MediaQuery.of(context).size.height / 33),
                               ),
 
                             ),
@@ -516,11 +464,11 @@ class _ScannerPageState extends State<ScannerPage> {
 
                             child: Text(
 
-                              'CG: ${snapshot.data[index].console_group} \n ST: ${snapshot.data[index].station}\n BATCH ID:$batchID',
+                              '${snapshot.data[index].console_group} \n\n ${snapshot.data[index].station}',
                               textAlign:TextAlign.center,
                               style: TextStyle(color: Colors.white,
                                 fontSize: MediaQuery.of(context).size.width /
-                                    (MediaQuery.of(context).size.height / 20),
+                                    (MediaQuery.of(context).size.height / 33),
                               ),
 
                             ),
@@ -593,6 +541,7 @@ class _ScannerPageState extends State<ScannerPage> {
 
   }
 
+
   void _dialogFail() {
     EasyDialog(
         closeButton: true,
@@ -649,7 +598,72 @@ class _ScannerPageState extends State<ScannerPage> {
         ]).show(context);
   }
 
-  void _dialogSucces() {
+  void _dialogFailNet() {
+    EasyDialog(
+        closeButton: true,
+        width: 280,
+        height: 500,
+        contentPadding:
+        EdgeInsets.only(top: 1.0),
+        // Needed for the button design
+        contentList: [
+          Container(
+            child: Lottie.asset(
+              'assets/json/fail.json',
+              width: 200,
+              height: 200,
+            ),
+          ),
+          Container(
+            child: Text(
+              "Fail!! SERVER CONNECTION",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.redAccent,),
+              textScaleFactor: 2.8,
+            ),
+          ),
+          Container(
+            child: Text(
+              "\n Scan again or check your Internet Conection \n",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.black87),
+              textScaleFactor: 1.7,
+            ),
+          ),
+
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: Colors.greenAccent,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0))),
+            child: FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                "Okay",
+                style: TextStyle(color: Colors.black87),
+                textScaleFactor: 1.3,
+              ),
+            ),
+          ),
+        ]).show(context);
+  }
+
+  void _dialogSucces(String stationWS) {
+    print('WsBenjamin 1 $stationWS');
+    var strlen = stationWS.length;
+    var operlen = strlen-7;
+
+    var stws = stationWS.substring(0,7);
+    var nuws = stationWS.substring(8,strlen);
+    print('jolines 1 $strlen');
+    print('jolines 2 $stws');
+    print('jolines 3 $nuws');
     // insection= false;
     EasyDialog(
         closeButton: true,
@@ -674,16 +688,17 @@ class _ScannerPageState extends State<ScannerPage> {
           ),
           Container(
             child: Text(
-              "Station",
+              "$stws",
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[900]),
-              textScaleFactor: 4.2,
+              textScaleFactor: 2.2,
             ),
           ),
           Container(
+            alignment: Alignment.center,
             child: Text(
-              "5",
+              "$nuws",
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[900]),
-              textScaleFactor: 8.2,
+              textScaleFactor: 6.2,
             ),
           ),
           Container(
@@ -698,7 +713,7 @@ class _ScannerPageState extends State<ScannerPage> {
                 Navigator.of(context).pop();
               },
               child: Text(
-                "Okay",
+                "Ok",
                 style: TextStyle(color: Colors.black87),
                 textScaleFactor: 1.3,
               ),
@@ -707,9 +722,9 @@ class _ScannerPageState extends State<ScannerPage> {
         ]).show(context);
   }
 
-    Future<List<ConsultaBatch>> getScanner(String scanner, String bitacora) async {
+    Future<List<ConsultaBatch>> getScanner(String scanner, String bitacora, String station) async {
     print('wsbarcode $scanner ande the bitacora $bitacora');
-
+    print('WsBenjamin 1 $station');
     var url = 'http://3.217.149.82/batchjobx/ws/ws_valida_scanner.php?scanner=$scanner&bitacora=$bitacora';
     print(url);
     // Await the http get response, then decode the json-formatted response.
@@ -718,15 +733,21 @@ class _ScannerPageState extends State<ScannerPage> {
       var jsonResponse = convert.jsonDecode(response.body);
       var scanws = jsonResponse['SCAN'];
 
-      print('wsbarcoded ### $scanws');
-      if(scanws == 'SCAN SUCCESS'){
-        _dialogSucces();
+      print('wsvalor ### $scanws');
+      if(scanws != 'SCAN ERROR'){
+         AudioCache player = AudioCache();
+        player.play('sounds/beep.mp3');
+        print('WsBenjamin 2 $station');
+        _dialogSucces(scanws);
       }else{
         _dialogFail();
+         AudioCache player = AudioCache();
+        player.play('sounds/fail.mp3');
+
       }
 
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      _dialogFailNet();
     }
   }
 
