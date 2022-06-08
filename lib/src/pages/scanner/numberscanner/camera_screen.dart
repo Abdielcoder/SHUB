@@ -120,7 +120,6 @@ class ExamplePageState extends State<ExamplePage> {
         icon: Icon(Icons.camera_alt),
         color: Colors.white,
           onPressed: () async {
-            print("############22222");
             // If the returned path is not null navigate
             // to the DetailScreen
             await _takePicture().then((String path) {
@@ -135,7 +134,6 @@ class ExamplePageState extends State<ExamplePage> {
                   ),
                 );
               } else {
-                print("############22222");
                 print('Image path not found!');
               }
             });

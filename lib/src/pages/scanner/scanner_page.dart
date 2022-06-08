@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
+import 'package:camera/camera.dart';
 import 'package:easy_dialog/easy_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +85,40 @@ class ScannerPage extends StatefulWidget {
 }
 
 class _ScannerPageState extends State<ScannerPage> {
+  CameraController cameraController;
+  bool initialized = false;
+  ////////
+  // Takes picture with the selected device camera, and
+  // returns the image path
+  Future<String> _takePicture() async {
+    if (!cameraController.value.isInitialized) {
+      print("Controller is not initialized");
+      return null;
+    }
+
+    String imagePath;
+
+    if (cameraController.value.isTakingPicture) {
+      print("Processing is progress ...");
+      return null;
+    }
+
+    try {
+      // Turning off the camera flash
+      cameraController.setFlashMode(FlashMode.off);
+      // Returns the image in cross-platform file abstraction
+      final XFile file = await cameraController.takePicture();
+      // Retrieving the path
+      imagePath = file.path;
+    } on CameraException catch (e) {
+      print("Camera Exception: $e");
+      return null;
+    }
+
+    return imagePath;
+  }
+
+
   String _scanBarcode = 'Unknown';
 
   bool isInitilized = false;

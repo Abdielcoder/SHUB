@@ -1,8 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:http/http.dart' as http;
+import '../../../models/consultaBatch.dart';
+
+
 
 class DetailScreen extends StatefulWidget {
   final String imagePath;
@@ -65,6 +71,8 @@ class _DetailScreenState extends State<DetailScreen> {
           emailStrings.add(line.text);
           for (TextElement element in line.elements) {
             _elements.add(element);
+           // pref.setStringList('scan', _elements);
+
           }
         }
       }
@@ -146,7 +154,10 @@ class _DetailScreenState extends State<DetailScreen> {
                           physics: BouncingScrollPhysics(),
                           itemCount: _listEmailStrings.length,
                           itemBuilder: (context, index) =>
-                              Text(_listEmailStrings[index]),
+                          _text(_listEmailStrings[index]),
+                              // Text(_listEmailStrings[index]
+                              //
+                              // ),
                         )
                             : Container(),
                       ),
@@ -166,7 +177,18 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
   }
+
+   Widget _text(String _lista){
+     if(_lista == "4000888164"){
+       return Text("40000888164");
+     }else{
+       return Text("NULL");
+     }
+
+   }
 }
+
+
 
 // Helps in painting the bounding boxes around the recognized
 // email addresses in the picture
