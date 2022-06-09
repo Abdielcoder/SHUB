@@ -39,7 +39,7 @@ class LoginController {
       var profile = jsonResponse['profile'];
       var clientID = jsonResponse['clientID'];
       print('Response ### http: $jsonResponse.');
-
+      print('URL ### http: $clientID.');
       if(UsersID == 'USER ERROR'){
         _progressDialog.close();
         print('Error de inicio de session');

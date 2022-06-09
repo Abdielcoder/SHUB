@@ -323,6 +323,7 @@ class ExamplePageState extends State<ExamplePage> {
                       builder: (context) =>
                           DetailScreen(
                             imagePath: path,
+                            batchID: batchID,
                             ID: ID,
                             UsersID: UsersID,
                             clientID:clientID,
@@ -338,7 +339,7 @@ class ExamplePageState extends State<ExamplePage> {
             },
 /////
           ),
-        ),
+        )
       ),
     );
   }

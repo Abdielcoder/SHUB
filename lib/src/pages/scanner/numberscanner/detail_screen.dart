@@ -16,15 +16,28 @@ import '../scanner_page.dart';
 import 'camera_screen.dart';
 
 
+Future<List<ConsultaBatch>> updateBatchScan(http.Client client, String UsersID, String clientID, String ID,String barcode, String batchID  ) async {
+  print('URL VAR ::   http://3.217.149.82/batchjobx/ws/ws_actualizarBatch.php?UsersID=$UsersID&clientID=$clientID&bitacoraID=$ID&console_group=$barcode&batchID=$batchID&sts=OK');
+
+
+  final response = await client
+      .get(Uri.parse('http://3.217.149.82/batchjobx/ws/ws_actualizarBatch.php?UsersID=$UsersID&clientID=$clientID&bitacoraID=$ID&console_group=$barcode&batchID=$batchID&sts=OK'));
+
+  print(response.body);
+  // Use the compute function to run parsePhotos in a separate isolate.
+  return compute(passUpdateBatch, response.body);
+}
+
 
 class DetailScreen extends StatefulWidget {
   String imagePath;
   List<String> groupConsole;
   String ID;
+  String batchID;
   String clientID;
   String UsersID;
 
-  DetailScreen({ this.imagePath ,this.ID ,this.clientID, this.UsersID,this.groupConsole});
+  DetailScreen({ this.imagePath ,this.ID ,this.batchID,this.clientID, this.UsersID,this.groupConsole});
 
   @override
   _DetailScreenState createState() => _DetailScreenState();
@@ -33,6 +46,7 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
    String _imagePath;
    String ID;
+   String  batchID;
    String clientID;
    String UsersID;
    List<String>groupConsole;
@@ -105,7 +119,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
     setState(() {
       _listEmailStrings = emailStrings;
-      _text(context,_listEmailStrings,ID,clientID,UsersID);
+      _text(context,_listEmailStrings,ID,clientID,UsersID,batchID);
     });
   }
 
@@ -114,6 +128,7 @@ class _DetailScreenState extends State<DetailScreen> {
     _imagePath = widget.imagePath;
     groupConsole =widget.groupConsole;
     ID =widget.ID;
+    batchID =widget.batchID;
     clientID=widget.clientID;
     UsersID=widget.UsersID;
     // Initializing the text detector
@@ -222,7 +237,8 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-   Widget _text(BuildContext context, List<String> _lista, String batch, String clientID, String UsersID){
+
+   Widget _text(BuildContext context, List<String> _lista, String batch, String clientID, String UsersID, String batchID){
      print('WsAbdiel valor númerico de la lista :{  } valor contenido de la lista : { $_lista }');
      print('WsAbdiel selectedScanned previus : { $groupConsole }');
       bool encuentra = false;
@@ -242,7 +258,7 @@ class _DetailScreenState extends State<DetailScreen> {
        if (groupConsole.contains(_lista[i])) {
          encuentra = true;
          print('WsAbdiel 33');
-         getScanner(context,_lista[i],batch,clientID,UsersID);
+         getScanner(context,_lista[i],batch,clientID,UsersID,batchID);
          return Text('LA LISTA : $_lista');
        }
 
@@ -316,7 +332,32 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 }
 
-Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, String clientID, String UsersID ) async {
+//LIST ADRESS
+Widget _update(String UsersID,String clientID , String ID,String console_group,String batchID ) {
+  return FutureBuilder<List<ConsultaBatch>>(
+    future: updateBatchScan(http.Client(),UsersID,clientID,ID,console_group,batchID),
+    builder: (context, snapshot) {
+
+      if (snapshot.hasError) {
+        print('URL VARSS');
+        return const Center(
+          child: Text('An error has occurred!'),
+        );
+      } else if (snapshot.hasData) {
+        print('URL VAR 2');
+        return Container();
+
+      } else {
+        print('URL VAR 3');
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    },
+  );
+}
+
+Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, String clientID, String UsersID, String batchID ) async {
   print('WsAbdiel 333-');
   print('wsbarcode $scanner ande the bitacora $bitacora');
  // print('WsAbdiel 1 $station');
@@ -336,6 +377,7 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
     print('WsAbdiel ### $scanws');
     if(scanws != 'SCAN ERROR'){
       print('WsAbdiel 333-66');
+      _update(UsersID,clientID,bitacora,scanner,batchID);
      // AudioCache player = AudioCache();
      // player.play('sounds/beep.mp3');
      // print('WsAbdiel 2 $station');
@@ -415,6 +457,7 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
   } else {
    // _dialogFailNet();
   }
+
 
 
 
