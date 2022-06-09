@@ -15,9 +15,10 @@ import 'camera_screen.dart';
 
 
 class DetailScreen extends StatefulWidget {
-  final String imagePath;
+  String imagePath;
+  List<String> groupConsole;
 
-  const DetailScreen({ this.imagePath});
+  DetailScreen({ this.imagePath ,this.groupConsole});
 
   @override
   _DetailScreenState createState() => _DetailScreenState();
@@ -25,6 +26,8 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
    String _imagePath;
+   List<String>groupConsole;
+
    TextDetector _textDetector;
   Size _imageSize;
   List<TextElement> _elements = [];
@@ -94,7 +97,9 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   void initState() {
     _imagePath = widget.imagePath;
+    groupConsole =widget.groupConsole;
     // Initializing the text detector
+
     _textDetector = GoogleMlKit.vision.textDetector();
     _recognizeEmails();
     super.initState();
@@ -188,16 +193,13 @@ class _DetailScreenState extends State<DetailScreen> {
 
    Widget _text(BuildContext context, String _lista){
      print('WsAbdiel valor númerico de la lista :{  } valor contenido de la lista : { $_lista }');
-     if(_lista == "4000888164"){
-     //  print('WsAbdiel valido $station');
-       getScanner(context,"4000888164","2","5");
-       return Text("400888164");
+     print('WsAbdiel selectedScanned previus : { $groupConsole }');
 
-     }else{
-       //return Text("NULL");
+     if (groupConsole.contains(_lista)) {
+       getScanner(context,_lista,"13","5");
+       return Text('LA LISTA : $_lista');
      }
-
-   }
+  }
 }
 
 Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, String station) async {

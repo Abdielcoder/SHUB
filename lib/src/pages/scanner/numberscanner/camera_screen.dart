@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../models/consultaBatch.dart';
 import 'detail_screen.dart';
 
@@ -16,6 +17,8 @@ var batch_number;
 var batchID;
 var consoleGroup;
 var station;
+List<String> scanSelected = [];
+SharedPreferences pref;
 
 Future<List<ConsultaBatch>> fetchPhotos(http.Client client, String UsersID, String clientID, String ID ) async {
   final response = await client
@@ -47,6 +50,11 @@ List<ConsultaBatch> parsePhotos(String responseBody) {
 //   );
 // }
 class ExamplePage extends StatefulWidget {
+  static Future init() async {
+    pref = await SharedPreferences.getInstance();
+
+  }
+
   @override
   State<StatefulWidget> createState() => ExamplePageState();
 }
@@ -54,6 +62,7 @@ class ExamplePage extends StatefulWidget {
 class ExamplePageState extends State<ExamplePage> {
   CameraController cameraController;
   bool initialized = false;
+
   ////////
   // Takes picture with the selected device camera, and
   // returns the image path
@@ -84,6 +93,7 @@ class ExamplePageState extends State<ExamplePage> {
 
     return imagePath;
   }
+
   ////////
 
   @override
@@ -92,6 +102,7 @@ class ExamplePageState extends State<ExamplePage> {
 
     _initCamera();
   }
+
   ////
   @override
   void dispose() {
@@ -103,7 +114,10 @@ class ExamplePageState extends State<ExamplePage> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
+    final arguments = (ModalRoute
+        .of(context)
+        ?.settings
+        .arguments ?? <String, dynamic>{}) as Map;
     print('Los elementos son : $arguments');
     print(arguments['batch_number']);
     print(arguments['ID']);
@@ -113,65 +127,65 @@ class ExamplePageState extends State<ExamplePage> {
     ID = arguments['ID'];
 
     return Scaffold(
-      body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage("https://wallpaper.dog/large/10762816.png"),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: ClipRRect( // make sure we apply clip it properly
-      child: BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-      child: Column(
-        children: [
-          Container(
-              alignment: Alignment.topCenter,
-              margin: EdgeInsets.only(top: 40),
-              child: Text(
-                'SCAN UTILITY',
-                textAlign:TextAlign.center,
-                style: TextStyle(fontSize: 28,
-                    fontFamily: 'Prompt-Italic',
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              )
-          ),
-            Container(
-            margin: EdgeInsets.only(top: 0),
-            alignment: Alignment.topCenter,
-            child: Lottie.asset(
-              'assets/json/code3.json',
-              width: 120,
-
-            ),
-          ),
-          Container(
-            width: 500,
-              height: 300,
-              child: _cameraPreview()),
-          Container
-            (
-            margin: EdgeInsets.only(top:30),
-              child: _button()),
-           Center(
-              child: Container(
-                height: 0,
-                  margin: EdgeInsets.only(top: 0),
-                  child: Visibility(
-                    visible: false,
-                      child: _listAddress())
+        body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage("https://wallpaper.dog/large/10762816.png"),
+                fit: BoxFit.cover,
               ),
             ),
-         // ),
+            child: ClipRRect( // make sure we apply clip it properly
+                child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
+                    child: Column(
+                      children: [
+                        Container(
+                            alignment: Alignment.topCenter,
+                            margin: EdgeInsets.only(top: 40),
+                            child: Text(
+                              'SCAN UTILITY',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 28,
+                                  fontFamily: 'Prompt-Italic',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 0),
+                          alignment: Alignment.topCenter,
+                          child: Lottie.asset(
+                            'assets/json/code3.json',
+                            width: 120,
 
-        ],
-      )
-    // ))
-    //   ),
-      )
-    )
-    )
+                          ),
+                        ),
+                        Container(
+                            width: 500,
+                            height: 300,
+                            child: _cameraPreview()),
+                        Container
+                          (
+                            margin: EdgeInsets.only(top: 30),
+                            child: _button()),
+                        Center(
+                          child: Container(
+                              height:150,
+                              margin: EdgeInsets.only(top: 0),
+                              child: Visibility(
+                                  visible: true,
+                                  child: _listAddress())
+                          ),
+                        ),
+                        // ),
+
+                      ],
+                    )
+                  // ))
+                  //   ),
+                )
+            )
+        )
     );
   }
 
@@ -192,14 +206,11 @@ class ExamplePageState extends State<ExamplePage> {
   }
 
 
-
-
   //LIST ADRESS
   Widget _listAddress() {
     return FutureBuilder<List<ConsultaBatch>>(
-      future: fetchPhotos(http.Client(),UsersID,clientID,ID),
+      future: fetchPhotos(http.Client(), UsersID, clientID, ID),
       builder: (context, snapshot) {
-
         if (snapshot.hasError) {
           return const Center(
             child: Text('An error has occurred!'),
@@ -214,13 +225,24 @@ class ExamplePageState extends State<ExamplePage> {
                     shrinkWrap: true,
                     gridDelegate:
                     SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1,
-                      childAspectRatio: MediaQuery.of(context).size.width /
-                          (MediaQuery.of(context).size.height / 15),),
+                      childAspectRatio: MediaQuery
+                          .of(context)
+                          .size
+                          .width /
+                          (MediaQuery
+                              .of(context)
+                              .size
+                              .height / 15),),
                     itemBuilder: (BuildContext context, int index) {
-                      batchID =snapshot.data[index].ID;
+                      batchID = snapshot.data[index].ID;
+                      var consoleg = snapshot.data[index].console_group;
+                      print('WsAbdiel valor camera1 : $consoleg');
+                      scanSelected.add(consoleg);
+                      //print('WsAbdiel camera2 : $scanSelected');
 
                       return Container(
-                        margin: new EdgeInsets.symmetric(horizontal: 25.0,vertical: 2.0),
+                        margin: new EdgeInsets.symmetric(
+                            horizontal: 25.0, vertical: 2.0),
                         decoration: BoxDecoration(
                           // color: const Color(0xff7c94b6),
                           color: Colors.black,
@@ -229,7 +251,7 @@ class ExamplePageState extends State<ExamplePage> {
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               // Navigator.pushNamed(
                               //   context,
                               //   'scanner',
@@ -239,11 +261,19 @@ class ExamplePageState extends State<ExamplePage> {
 
                             child: Container(
                               child: Text(
-                                ' ð Console Group :${snapshot.data[index].console_group} / ${snapshot.data[index].station}',
-                                textAlign:TextAlign.center,
+                                ' ð Console Group :${snapshot.data[index]
+                                    .console_group} / ${snapshot.data[index]
+                                    .station}',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(color: Colors.lightGreen,
-                                  fontSize: MediaQuery.of(context).size.width /
-                                      (MediaQuery.of(context).size.height / 33),
+                                  fontSize: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width /
+                                      (MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height / 33),
                                 ),
 
                               ),
@@ -257,7 +287,6 @@ class ExamplePageState extends State<ExamplePage> {
                   ),
                 )),
           );
-
         } else {
           return const Center(
             child: CircularProgressIndicator(),
@@ -274,7 +303,7 @@ class ExamplePageState extends State<ExamplePage> {
         color: Colors.lightBlue,
         shape: CircleBorder(),
       ),
-      child:ClipRRect(
+      child: ClipRRect(
         borderRadius: BorderRadius.circular(120),
         child: Container(
           color: Colors.black,
@@ -282,31 +311,34 @@ class ExamplePageState extends State<ExamplePage> {
             iconSize: 60,
             icon: Icon(Icons.camera_alt),
             color: Colors.white,
-              onPressed: () async {
-                // If the returned path is not null navigate
-                // to the DetailScreen
-                await _takePicture().then((String path) {
-                  print("############"+path);
-                  if (path != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailScreen(
-                          imagePath: path,
-                        ),
-                      ),
-                    );
-                  } else {
-                    print('Image path not found!');
-                  }
-                });
-              },
+            onPressed: () async {
+              // If the returned path is not null navigate
+              // to the DetailScreen
+              await _takePicture().then((String path) {
+                print("############" + path);
+                if (path != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          DetailScreen(
+                            imagePath: path,
+                            groupConsole: scanSelected,
+                          ),
+                    ),
+                  );
+                } else {
+                  print('Image path not found!');
+                }
+              });
+            },
 /////
           ),
         ),
       ),
     );
   }
+
   Widget _cameraPreview() {
     if (initialized) {
       return Padding(
