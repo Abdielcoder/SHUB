@@ -224,7 +224,7 @@ class ExamplePageState extends State<ExamplePage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     gridDelegate:
-                    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1,
+                    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 25,
                       childAspectRatio: MediaQuery
                           .of(context)
                           .size
@@ -232,7 +232,7 @@ class ExamplePageState extends State<ExamplePage> {
                           (MediaQuery
                               .of(context)
                               .size
-                              .height / 15),),
+                              .height / 2),),
                     itemBuilder: (BuildContext context, int index) {
                       batchID = snapshot.data[index].ID;
                       var consoleg = snapshot.data[index].console_group;
@@ -242,10 +242,10 @@ class ExamplePageState extends State<ExamplePage> {
 
                       return Container(
                         margin: new EdgeInsets.symmetric(
-                            horizontal: 25.0, vertical: 2.0),
+                            horizontal: 0, vertical: 2.0),
                         decoration: BoxDecoration(
                           // color: const Color(0xff7c94b6),
-                          color: Colors.black,
+                          color: Colors.transparent,
 
                         ),
                         child: Padding(
@@ -273,7 +273,7 @@ class ExamplePageState extends State<ExamplePage> {
                                       (MediaQuery
                                           .of(context)
                                           .size
-                                          .height / 33),
+                                          .height / 12),
                                 ),
 
                               ),
@@ -323,6 +323,10 @@ class ExamplePageState extends State<ExamplePage> {
                       builder: (context) =>
                           DetailScreen(
                             imagePath: path,
+                            ID: ID,
+                            UsersID: UsersID,
+                            clientID:clientID,
+
                             groupConsole: scanSelected,
                           ),
                     ),

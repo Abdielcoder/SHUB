@@ -219,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                       onTap: (){
                         Navigator.pushNamed(
                           context,
-                          'scannerPage',
+                          'scanner',
                           arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}','UsersID':UsersID, 'clientID':clientID},
                         );
                       },

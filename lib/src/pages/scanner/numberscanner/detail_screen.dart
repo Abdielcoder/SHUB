@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:convert' as convert;
+import 'dart:ui';
 import 'package:easy_dialog/easy_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
+
 import '../../../models/consultaBatch.dart';
 import '../scanner_page.dart';
 import 'camera_screen.dart';
@@ -17,8 +20,11 @@ import 'camera_screen.dart';
 class DetailScreen extends StatefulWidget {
   String imagePath;
   List<String> groupConsole;
+  String ID;
+  String clientID;
+  String UsersID;
 
-  DetailScreen({ this.imagePath ,this.groupConsole});
+  DetailScreen({ this.imagePath ,this.ID ,this.clientID, this.UsersID,this.groupConsole});
 
   @override
   _DetailScreenState createState() => _DetailScreenState();
@@ -26,12 +32,16 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
    String _imagePath;
+   String ID;
+   String clientID;
+   String UsersID;
    List<String>groupConsole;
-
+   ProgressDialog _progresDialog;
    TextDetector _textDetector;
+   int contador = 0;
   Size _imageSize;
   List<TextElement> _elements = [];
-
+  int cuentaRex =0;
   List<String> _listEmailStrings;
 
   // Fetching the image size from the image file
@@ -72,25 +82,30 @@ class _DetailScreenState extends State<DetailScreen> {
 
     // Finding and storing the text String(s) and the TextElement(s)
     for (TextBlock block in text.blocks) {
+      cuentaRex = cuentaRex+1;
+      print('tnumeros : $cuentaRex');
       for (TextLine line in block.lines) {
         print('textoEncontrado lineas : ${line.text}');
         if (regEx.hasMatch(line.text)) {
           emailStrings.add(line.text);
-
+        //  var numeroR = emailStrings.
+         // print('textoEmails emails : ${line.text}');
           print('textoEmails emails : ${line.text}');
           for (TextElement element in line.elements) {
             print('textoelements elements : ${line.text}');
-            _text(context,line.text);
+
             _elements.add(element);
            // pref.setStringList('scan', _elements);
 
           }
         }
       }
+
     }
 
     setState(() {
       _listEmailStrings = emailStrings;
+      _text(context,_listEmailStrings,ID,clientID,UsersID);
     });
   }
 
@@ -98,8 +113,11 @@ class _DetailScreenState extends State<DetailScreen> {
   void initState() {
     _imagePath = widget.imagePath;
     groupConsole =widget.groupConsole;
+    ID =widget.ID;
+    clientID=widget.clientID;
+    UsersID=widget.UsersID;
     // Initializing the text detector
-
+   _progresDialog = new ProgressDialog();
     _textDetector = GoogleMlKit.vision.textDetector();
     _recognizeEmails();
     super.initState();
@@ -116,7 +134,8 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Image Details"),
+        backgroundColor: Colors.black,
+        title: Text("Image Analysis"),
       ),
       body: _imageSize != null
           ? Stack(
@@ -141,9 +160,9 @@ class _DetailScreenState extends State<DetailScreen> {
             alignment: Alignment.bottomCenter,
             child: Card(
               elevation: 8,
-              color: Colors.white,
+              color: Colors.black,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(top:10,bottom: 70,right: 50,left: 50),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,7 +172,9 @@ class _DetailScreenState extends State<DetailScreen> {
                       child: Text(
                         "LOG ALGORITM DETECTED FROM IMAGE",
                         style: TextStyle(
-                          fontSize: 20,
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: 'Prompt-Italic',
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -168,7 +189,17 @@ class _DetailScreenState extends State<DetailScreen> {
                           itemCount: _listEmailStrings.length,
                           itemBuilder: (context, index) =>
                           // _text(context,_listEmailStrings[index],index),
-                              Text(_listEmailStrings[index]
+                              Text(
+                                _listEmailStrings[index],
+                                  style: TextStyle(
+                                    color: Colors.lightGreen,
+                                    fontSize: 15,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.bold,
+                                  ),
+
+
+
 
                               ),
                         )
@@ -191,33 +222,123 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-   Widget _text(BuildContext context, String _lista){
+   Widget _text(BuildContext context, List<String> _lista, String batch, String clientID, String UsersID){
      print('WsAbdiel valor númerico de la lista :{  } valor contenido de la lista : { $_lista }');
      print('WsAbdiel selectedScanned previus : { $groupConsole }');
+      bool encuentra = false;
+     for(var i = 0; i < _lista.length; i++){
+        // var listaImagen;
+        // var numero;
+        // var listaPrevia;
+        // var numeroPrevio;
+        // listaImagen =numero[1];
+        // for(var j = 0; j < groupConsole.length; j++){
+        //   listaPrevia =   numeroPrevio[j];
+        //     if(listaPrevia==listaImagen){
+        //
+        //     }
+        // }
+       print('lista tamaño $contador');
+       if (groupConsole.contains(_lista[i])) {
+         encuentra = true;
+         print('WsAbdiel 33');
+         getScanner(context,_lista[i],batch,clientID,UsersID);
+         return Text('LA LISTA : $_lista');
+       }
 
-     if (groupConsole.contains(_lista)) {
-       getScanner(context,_lista,"13","5");
-       return Text('LA LISTA : $_lista');
      }
+     if(encuentra==false){
+       EasyDialog(
+           closeButton: true,
+           width: 280,
+           height: 500,
+           contentPadding:
+           EdgeInsets.only(top: 1.0),
+           // Needed for the button design
+           contentList: [
+             Container(
+               child: Lottie.asset(
+                 'assets/json/fail.json',
+                 width: 200,
+                 height: 200,
+               ),
+             ),
+             Container(
+               child: Text(
+                 "Fail!! we not found the station",
+                 textAlign: TextAlign.center,
+                 style: TextStyle(
+                   fontWeight: FontWeight.bold, color: Colors.redAccent,),
+                 textScaleFactor: 2.8,
+               ),
+             ),
+             Container(
+               child: Text(
+                 "\n Scan again or check if information  are correct \n",
+                 textAlign: TextAlign.center,
+                 style: TextStyle(
+                     fontWeight: FontWeight.bold, color: Colors.black87),
+                 textScaleFactor: 1.7,
+               ),
+             ),
+
+             Container(
+               width: double.infinity,
+               decoration: BoxDecoration(
+                   color: Colors.greenAccent,
+                   borderRadius: BorderRadius.only(
+                       bottomLeft: Radius.circular(10.0),
+                       bottomRight: Radius.circular(10.0))),
+               child: FlatButton(
+                 onPressed: () {
+
+                   // Navigator.pushNamed(
+                   //   context,
+                   //   'scanner',
+                   //   arguments: {
+                   //     'ID':batch, 'UsersID':UsersID, 'clientID':clientID,
+                   //   },
+                   // );
+                   Navigator.of(context).pop();
+                 },
+                 child: Text(
+                   "Okay",
+                   style: TextStyle(color: Colors.black87),
+                   textScaleFactor: 1.3,
+                 ),
+               ),
+             ),
+           ]).show(context);
+
+     }
+
+
   }
 }
 
-Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, String station) async {
+Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, String clientID, String UsersID ) async {
+  print('WsAbdiel 333-');
   print('wsbarcode $scanner ande the bitacora $bitacora');
-  print('WsAbdiel 1 $station');
+ // print('WsAbdiel 1 $station');
   var url = 'http://3.217.149.82/batchjobx/ws/ws_valida_scanner.php?scanner=$scanner&bitacora=$bitacora';
   print(url);
   // Await the http get response, then decode the json-formatted response.
   var response = await http.get(Uri.parse(url));
   if (response.statusCode == 200) {
+    print('WsAbdiel 333-6');
     var jsonResponse = convert.jsonDecode(response.body);
     var scanws = jsonResponse['SCAN'];
+    var strlen = scanws.length;
+    var operlen = strlen-7;
 
+    var stws = scanws.substring(0,7);
+    var nuws = scanws.substring(8,strlen);
     print('WsAbdiel ### $scanws');
     if(scanws != 'SCAN ERROR'){
+      print('WsAbdiel 333-66');
      // AudioCache player = AudioCache();
      // player.play('sounds/beep.mp3');
-      print('WsAbdiel 2 $station');
+     // print('WsAbdiel 2 $station');
     //  _dialogSucces(scanws);
       EasyDialog(
           closeButton: true,
@@ -242,7 +363,7 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
             ),
             Container(
               child: Text(
-                "$station",
+                "$stws",
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[900]),
                 textScaleFactor: 2.2,
               ),
@@ -250,7 +371,7 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
             Container(
               alignment: Alignment.center,
               child: Text(
-                "$station",
+                "$nuws",
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[900]),
                 textScaleFactor: 6.2,
               ),
@@ -268,11 +389,13 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
                  //  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                  //      ExamplePage()), (Route<dynamic> route) => false);
 
-                  Navigator.pushAndRemoveUntil<void>(
-                    context,
-                    MaterialPageRoute<void>(builder: (BuildContext context) => ExamplePage()),
-                    ModalRoute.withName('scanner',),
-                  );
+                  // Navigator.pushAndRemoveUntil<void>(
+                  //   context,
+                  //   MaterialPageRoute<void>(builder: (BuildContext context) => ExamplePage()),
+                  //   ModalRoute.withName('scanner',),
+                  // );
+                  Navigator.of(context).pop();
+
                 },
                 child: Text(
                   "Ok",
@@ -284,9 +407,8 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
           ]).show(context);
 
     }else{
-      // _dialogFail();
-      // AudioCache player = AudioCache();
-      // player.play('sounds/fail.mp3');
+      print('WsAbdiel 333-666-');
+
 
     }
 
@@ -297,6 +419,10 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
 
 
 }
+
+
+
+
 
 // Helps in painting the bounding boxes around the recognized
 // email addresses in the picture
@@ -322,7 +448,7 @@ class TextDetectorPainter extends CustomPainter {
 
     final Paint paint = Paint()
       ..style = PaintingStyle.stroke
-      ..color = Colors.red
+      ..color = Colors.yellowAccent
       ..strokeWidth = 2.0;
 
     for (TextElement element in elements) {
