@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:convert' as convert;
 import 'dart:ui';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:easy_dialog/easy_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
+import 'package:uber_clone_flutter/src/pages/scanner/numberscanner/detail_screen_controller.dart';
 
 import '../../../models/consultaBatch.dart';
 import '../scanner_page.dart';
@@ -30,6 +33,7 @@ Future<List<ConsultaBatch>> updateBatchScan(http.Client client, String UsersID, 
 
 
 class DetailScreen extends StatefulWidget {
+
   String imagePath;
   List<String> groupConsole;
   String ID;
@@ -43,16 +47,17 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  DetailScreenController _con = new DetailScreenController();
   String lecturaScanner;
-   String _imagePath;
-   String ID;
-   String  batchID;
-   String clientID;
-   String UsersID;
-   List<String>groupConsole;
-   ProgressDialog _progresDialog;
-   TextDetector _textDetector;
-   int contador = 0;
+  String _imagePath;
+  String ID;
+  String  batchID;
+  String clientID;
+  String UsersID;
+  List<String>groupConsole;
+  ProgressDialog _progresDialog;
+  TextDetector _textDetector;
+  int contador = 0;
   Size _imageSize;
   List<TextElement> _elements = [];
   int cuentaRex =0;
@@ -102,14 +107,14 @@ class _DetailScreenState extends State<DetailScreen> {
         print('textoEncontrado lineas : ${line.text}');
         if (regEx.hasMatch(line.text)) {
           emailStrings.add(line.text);
-        //  var numeroR = emailStrings.
-         // print('textoEmails emails : ${line.text}');
+          //  var numeroR = emailStrings.
+          // print('textoEmails emails : ${line.text}');
           print('textoEmails emails : ${line.text}');
           for (TextElement element in line.elements) {
             print('textoelements elements : ${line.text}');
 
             _elements.add(element);
-           // pref.setStringList('scan', _elements);
+            // pref.setStringList('scan', _elements);
 
           }
         }
@@ -132,10 +137,13 @@ class _DetailScreenState extends State<DetailScreen> {
     clientID=widget.clientID;
     UsersID=widget.UsersID;
     // Initializing the text detector
-   _progresDialog = new ProgressDialog();
+    _progresDialog = new ProgressDialog();
     _textDetector = GoogleMlKit.vision.textDetector();
     _recognizeEmails();
     super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _con.init(context, refresh);
+    });
   }
 
   @override
@@ -174,8 +182,8 @@ class _DetailScreenState extends State<DetailScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Card(
-              elevation: 8,
-              color: Colors.black,
+              elevation: 0,
+              color: Colors.transparent,
               child: Padding(
                 padding: const EdgeInsets.only(top:10,bottom: 70,right: 50,left: 50),
                 child: Column(
@@ -183,13 +191,13 @@ class _DetailScreenState extends State<DetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
+                      padding: const EdgeInsets.only(bottom: 1.0),
                       child: Center(
                         child: Text(
                           "LOG ALGORITM DETECTED FROM IMAGE",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 0,
                             fontFamily: 'Prompt-Italic',
                             fontWeight: FontWeight.bold,
                           ),
@@ -197,7 +205,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                     Container(
-                      height: 60,
+                      height: 0,
                       child: SingleChildScrollView(
                         child: _listEmailStrings != null
                             ? ListView.builder(
@@ -206,24 +214,20 @@ class _DetailScreenState extends State<DetailScreen> {
                           itemCount: _listEmailStrings.length,
                           itemBuilder: (context, index) =>
                           // _text(context,_listEmailStrings[index],index),
-                              Container(
-                                color: Colors.blueGrey,
-                                child: Center(
-                                  child: Text(
-                                    lecturaScanner,
-                                      style: TextStyle(
-                                        color: Colors.lightGreen,
-                                        fontSize: 40,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.bold,
-                                      ),
-
-
-
-
-                                  ),
+                          Container(
+                            color: Colors.blueGrey,
+                            child: Center(
+                              child: Text(
+                                _listEmailStrings[index],
+                                style: TextStyle(
+                                  color: Colors.lightGreen,
+                                  fontSize: 0,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
+                            ),
+                          ),
                         )
                             : Container(),
                       ),
@@ -245,88 +249,100 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
 
-   Widget _text(BuildContext context, List<String> _lista, String batch, String clientID, String UsersID, String batchID){
-     print('WsAbdiel valor númerico de la lista :{  } valor contenido de la lista : { $_lista }');
-     print('WsAbdiel selectedScanned previus : { $groupConsole }');
-      bool encuentra = false;
-     for(var i = 0; i < _lista.length; i++){
+  Widget _text(BuildContext context, List<String> _lista, String batch, String clientID, String UsersID, String batchID){
+    print('WsAbdiel valor númerico de la lista :{  } valor contenido de la lista : { $_lista }');
+    print('WsAbdiel selectedScanned previus : { $groupConsole }');
+    bool encuentra = false;
+    for(var i = 0; i < _lista.length; i++){
 
-       print('lista tamaño $contador');
-       if (groupConsole.contains(_lista[i])) {
-         lecturaScanner = _lista[i];
-         encuentra = true;
-         print('WsAbdiel 33');
-         getScanner(context,_lista[i],batch,clientID,UsersID,batchID);
-         return Text('LA LISTA : $_lista');
-       }
+      print('lista tamaño $contador');
+      if (groupConsole.contains(_lista[i])) {
+        AudioCache player = AudioCache();
+        player.play('sounds/beep.mp3');
 
-     }
-     if(encuentra==false){
-       EasyDialog(
-           closeButton: true,
-           width: 280,
-           height: 500,
-           contentPadding:
-           EdgeInsets.only(top: 1.0),
-           // Needed for the button design
-           contentList: [
-             Container(
-               child: Lottie.asset(
-                 'assets/json/fail.json',
-                 width: 200,
-                 height: 200,
-               ),
-             ),
-             Container(
-               child: Text(
-                 "Fail!! we not found the station",
-                 textAlign: TextAlign.center,
-                 style: TextStyle(
-                   fontWeight: FontWeight.bold, color: Colors.redAccent,),
-                 textScaleFactor: 2.8,
-               ),
-             ),
-             Container(
-               child: Text(
-                 "\n Scan again or check if information  are correct \n",
-                 textAlign: TextAlign.center,
-                 style: TextStyle(
-                     fontWeight: FontWeight.bold, color: Colors.black87),
-                 textScaleFactor: 1.7,
-               ),
-             ),
+        encuentra = true;
+        print('WsAbdiel 33');
+        getScanner(context,_lista[i],batch,clientID,UsersID,batchID);
+        setState(() {
+          lecturaScanner = _lista[i];
+        });
 
-             Container(
-               width: double.infinity,
-               decoration: BoxDecoration(
-                   color: Colors.greenAccent,
-                   borderRadius: BorderRadius.only(
-                       bottomLeft: Radius.circular(10.0),
-                       bottomRight: Radius.circular(10.0))),
-               child: FlatButton(
-                 onPressed: () {
+        return Text('LA LISTA : $_lista');
+      }
 
-                   // Navigator.pushNamed(
-                   //   context,
-                   //   'scanner',
-                   //   arguments: {
-                   //     'ID':batch, 'UsersID':UsersID, 'clientID':clientID,
-                   //   },
-                   // );
-                   Navigator.of(context).pop();
-                 },
-                 child: Text(
-                   "Okay",
-                   style: TextStyle(color: Colors.black87),
-                   textScaleFactor: 1.3,
-                 ),
-               ),
-             ),
-           ]).show(context);
+    }
+    if(encuentra==false){
+      AudioCache player = AudioCache();
+      player.play('sounds/fail.mp3');
+      EasyDialog(
+          closeButton: true,
+          width: 280,
+          height: 500,
+          contentPadding:
+          EdgeInsets.only(top: 1.0),
+          // Needed for the button design
+          contentList: [
+            Container(
+              child: Lottie.asset(
+                'assets/json/fail.json',
+                width: 200,
+                height: 200,
+              ),
+            ),
+            Container(
+              child: Text(
+                "Fail!! we not found the station",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.redAccent,),
+                textScaleFactor: 2.8,
+              ),
+            ),
+            Container(
+              child: Text(
+                "\n Scan again or check if information  are correct \n",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black87),
+                textScaleFactor: 1.7,
+              ),
+            ),
 
-     }
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Colors.greenAccent,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0))),
+              child: FlatButton(
+                onPressed: () {
+
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   'scanner',
+                  //   arguments: {
+                  //     'ID':batch, 'UsersID':UsersID, 'clientID':clientID,
+                  //   },
+                  // );
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  "Okay",
+                  style: TextStyle(color: Colors.black87),
+                  textScaleFactor: 1.3,
+                ),
+              ),
+            ),
+          ]).show(context);
+
+    }
 
 
+  }
+
+  void refresh() {
+    setState(() {});
   }
 }
 
@@ -358,7 +374,7 @@ Widget _update(String UsersID,String clientID , String ID,String console_group,S
 Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, String clientID, String UsersID, String batchID ) async {
   print('WsAbdiel 333-');
   print('wsbarcode $scanner ande the bitacora $bitacora');
- // print('WsAbdiel 1 $station');
+  // print('WsAbdiel 1 $station');
   var url = 'http://3.217.149.82/batchjobx/ws/ws_valida_scanner.php?scanner=$scanner&bitacora=$bitacora';
   print(url);
   // Await the http get response, then decode the json-formatted response.
@@ -367,19 +383,30 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
     print('WsAbdiel 333-6');
     var jsonResponse = convert.jsonDecode(response.body);
     var scanws = jsonResponse['SCAN'];
+    var sts = jsonResponse['STS'];
+
+    if(sts!= 'OK'){
+      sts = 'Dont Updated';
+    }else{
+      sts = 'Already updated';
+    }
+    var console = jsonResponse['CONSOLE'];
     var strlen = scanws.length;
     var operlen = strlen-7;
 
     var stws = scanws.substring(0,7);
     var nuws = scanws.substring(8,strlen);
-    print('WsAbdiel ### $scanws');
+    print('HYUYY ### $scanws');
+    print('HYUYY ### $sts');
+    print('HYUYY ### $console');
     if(scanws != 'SCAN ERROR'){
+
       print('WsAbdiel 333-66');
       _update(UsersID,clientID,bitacora,scanner,batchID);
-     // AudioCache player = AudioCache();
-     // player.play('sounds/beep.mp3');
-     // print('WsAbdiel 2 $station');
-    //  _dialogSucces(scanws);
+      // AudioCache player = AudioCache();
+      // player.play('sounds/beep.mp3');
+      // print('WsAbdiel 2 $station');
+      //  _dialogSucces(scanws);
       EasyDialog(
           closeButton: true,
           width: 280,
@@ -398,6 +425,29 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
               child: Text(
                 "Success!! we found the station",
                 style: TextStyle(fontWeight: FontWeight.bold,color: Colors.teal),
+                textScaleFactor: 1.2,
+              ),
+            ),
+            Container(
+              child: Text(
+                "CONSOLO GROUP:",
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.teal),
+                textScaleFactor: 2.2,
+              ),
+            ),
+            Container(
+              child: Center(
+                child: Text(
+                  "$console",
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                  textScaleFactor: 2.2,
+                ),
+              ),
+            ),
+            Container(
+              child: Text(
+                "STATUS: $sts",
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
                 textScaleFactor: 1.2,
               ),
             ),
@@ -425,9 +475,9 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
                       bottomRight: Radius.circular(10.0))),
               child: FlatButton(
                 onPressed: () {
-                 // Navigator.of(context).pop();
-                 //  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                 //      ExamplePage()), (Route<dynamic> route) => false);
+                  // Navigator.of(context).pop();
+                  //  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                  //      ExamplePage()), (Route<dynamic> route) => false);
 
                   // Navigator.pushAndRemoveUntil<void>(
                   //   context,
@@ -453,7 +503,7 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
     }
 
   } else {
-   // _dialogFailNet();
+    // _dialogFailNet();
   }
 
 

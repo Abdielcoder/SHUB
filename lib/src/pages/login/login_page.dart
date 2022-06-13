@@ -209,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                                       prefixIcon: Icon(
                                         Icons.email,
                                       ),
-                                      hintText: "Correo o telefono",
+                                      hintText: "User",
                                       hintStyle: TextStyle(
                                           color: Colors.grey,
                                           fontFamily: "Sofia"),
@@ -242,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
                                         });
                                       },
                                     ),
-                                      hintText: "Contraseña",
+                                      hintText: "Password",
                                       hintStyle: TextStyle(
                                           color: Colors.grey,
                                           fontFamily: "Sofia"),
