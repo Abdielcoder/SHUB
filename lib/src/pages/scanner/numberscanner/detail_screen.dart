@@ -36,7 +36,6 @@ class DetailScreen extends StatefulWidget {
   String batchID;
   String clientID;
   String UsersID;
-
   DetailScreen({ this.imagePath ,this.ID ,this.batchID,this.clientID, this.UsersID,this.groupConsole});
 
   @override
@@ -44,6 +43,7 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  String lecturaScanner;
    String _imagePath;
    String ID;
    String  batchID;
@@ -184,13 +184,15 @@ class _DetailScreenState extends State<DetailScreen> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Text(
-                        "LOG ALGORITM DETECTED FROM IMAGE",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontFamily: 'Prompt-Italic',
-                          fontWeight: FontWeight.bold,
+                      child: Center(
+                        child: Text(
+                          "LOG ALGORITM DETECTED FROM IMAGE",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontFamily: 'Prompt-Italic',
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -204,18 +206,23 @@ class _DetailScreenState extends State<DetailScreen> {
                           itemCount: _listEmailStrings.length,
                           itemBuilder: (context, index) =>
                           // _text(context,_listEmailStrings[index],index),
-                              Text(
-                                _listEmailStrings[index],
-                                  style: TextStyle(
-                                    color: Colors.lightGreen,
-                                    fontSize: 15,
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.bold,
+                              Container(
+                                color: Colors.blueGrey,
+                                child: Center(
+                                  child: Text(
+                                    lecturaScanner,
+                                      style: TextStyle(
+                                        color: Colors.lightGreen,
+                                        fontSize: 40,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+
+
+
+
                                   ),
-
-
-
-
+                                ),
                               ),
                         )
                             : Container(),
@@ -243,19 +250,10 @@ class _DetailScreenState extends State<DetailScreen> {
      print('WsAbdiel selectedScanned previus : { $groupConsole }');
       bool encuentra = false;
      for(var i = 0; i < _lista.length; i++){
-        // var listaImagen;
-        // var numero;
-        // var listaPrevia;
-        // var numeroPrevio;
-        // listaImagen =numero[1];
-        // for(var j = 0; j < groupConsole.length; j++){
-        //   listaPrevia =   numeroPrevio[j];
-        //     if(listaPrevia==listaImagen){
-        //
-        //     }
-        // }
+
        print('lista tamaño $contador');
        if (groupConsole.contains(_lista[i])) {
+         lecturaScanner = _lista[i];
          encuentra = true;
          print('WsAbdiel 33');
          getScanner(context,_lista[i],batch,clientID,UsersID,batchID);

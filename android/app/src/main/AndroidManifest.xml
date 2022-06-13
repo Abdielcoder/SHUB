@@ -39,13 +39,16 @@
 
 
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-       <activity android:name="io.github.edufolly.fluttermobilevision.ocr.OcrCaptureActivity" />
-       <activity android:name="io.github.edufolly.fluttermobilevision.barcode.BarcodeCaptureActivity" />
+       <activity android:name="io.github.edufolly.fluttermobilevision.ocr.OcrCaptureActivity"
+           android:exported="false"/>
+       <activity android:name="io.github.edufolly.fluttermobilevision.barcode.BarcodeCaptureActivity"
+           android:exported="false"/>
 
        <!-- Don't delete the meta-data below.
             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
@@ -53,12 +56,5 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
-
-       <meta-data android:name="com.google.android.geo.API_KEY"
-           android:value="AIzaSyAGXc7ydYXv5eDem1XS7TuMrFAhzEo6Ka0"/>
-
-       <meta-data
-           android:name="com.google.firebase.messaging.default_notification_channel_id"
-           android:value="pushnotificationapp"/>
     </application>
 </manifest>

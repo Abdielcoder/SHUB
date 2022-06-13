@@ -126,66 +126,71 @@ class ExamplePageState extends State<ExamplePage> {
     batch_number = arguments['batch_number'];
     ID = arguments['ID'];
 
-    return Scaffold(
-        body: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage("https://wallpaper.dog/large/10762816.png"),
-                fit: BoxFit.cover,
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
+
+          body: Container(
+
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://wallpaper.dog/large/10762816.png"),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            child: ClipRRect( // make sure we apply clip it properly
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-                    child: Column(
-                      children: [
-                        Container(
+              child: ClipRRect( // make sure we apply clip it properly
+                  child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
+                      child: Column(
+                        children: [
+                          Container(
+                              alignment: Alignment.topCenter,
+                              margin: EdgeInsets.only(top: 40),
+                              child: Text(
+                                'SCAN UTILITY',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 28,
+                                    fontFamily: 'Prompt-Italic',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              )
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 0),
                             alignment: Alignment.topCenter,
-                            margin: EdgeInsets.only(top: 40),
-                            child: Text(
-                              'SCAN UTILITY',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 28,
-                                  fontFamily: 'Prompt-Italic',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            )
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 0),
-                          alignment: Alignment.topCenter,
-                          child: Lottie.asset(
-                            'assets/json/code3.json',
-                            width: 120,
+                            child: Lottie.asset(
+                              'assets/json/code3.json',
+                              width: 120,
 
+                            ),
                           ),
-                        ),
-                        Container(
-                            width: 500,
-                            height: 300,
-                            child: _cameraPreview()),
-                        Container
-                          (
-                            margin: EdgeInsets.only(top: 30),
-                            child: _button()),
-                        Center(
-                          child: Container(
-                              height:150,
-                              margin: EdgeInsets.only(top: 0),
-                              child: Visibility(
-                                  visible: true,
-                                  child: _listAddress())
+                          Container(
+                              width: 800,
+                              height: 300,
+                              child: _cameraPreview()),
+                          Container
+                            (
+                              margin: EdgeInsets.only(top: 30),
+                              child: _button()),
+                          Center(
+                            child: Container(
+                                height:150,
+                                margin: EdgeInsets.only(top: 0),
+                                child: Visibility(
+                                    visible: true,
+                                    child: _listAddress())
+                            ),
                           ),
-                        ),
-                        // ),
+                          // ),
 
-                      ],
-                    )
-                  // ))
-                  //   ),
-                )
-            )
-        )
+                        ],
+                      )
+                    // ))
+                    //   ),
+                  )
+              )
+          )
+      ),
     );
   }
 
@@ -347,7 +352,7 @@ class ExamplePageState extends State<ExamplePage> {
   Widget _cameraPreview() {
     if (initialized) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 82),
+        padding: const EdgeInsets.symmetric(horizontal: 5),
         child: _CroppedCameraPreview(
           cameraController: cameraController,
         ),
@@ -389,7 +394,7 @@ class _CroppedCameraPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1,
+      aspectRatio: 2,
       child: Stack(
         children: [
           ClipRect(
@@ -397,7 +402,7 @@ class _CroppedCameraPreview extends StatelessWidget {
               scale: cameraController.value.aspectRatio,
               child: Center(
                 child: AspectRatio(
-                  aspectRatio: 1 / cameraController.value.aspectRatio,
+                  aspectRatio: 2 / cameraController.value.aspectRatio,
                   child: CameraPreview(cameraController),
                 ),
               ),
@@ -406,10 +411,10 @@ class _CroppedCameraPreview extends StatelessWidget {
           Container(
             decoration: ShapeDecoration(
               shape: CardScannerOverlayShape(
-                borderColor: Colors.yellow,
+                borderColor: Colors.red,
                 borderRadius: 12,
-                borderLength: 32,
-                borderWidth: 8,
+                borderLength: 15,
+                borderWidth: 6,
               ),
             ),
           ),
@@ -420,7 +425,7 @@ class _CroppedCameraPreview extends StatelessWidget {
 }
 ////////////
 // クレカ標準の比
-const _CARD_ASPECT_RATIO = 1 / 9;
+const _CARD_ASPECT_RATIO = 3 / 9;
 // 横の枠線marginを決める時用のfactor
 // 横幅の5%のサイズのmarginをとる
 const _OFFSET_X_FACTOR = 0.05;
