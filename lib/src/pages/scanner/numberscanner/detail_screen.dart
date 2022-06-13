@@ -182,8 +182,8 @@ class _DetailScreenState extends State<DetailScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Card(
-              elevation: 0,
-              color: Colors.transparent,
+              elevation: 10,
+              color: Colors.black87,
               child: Padding(
                 padding: const EdgeInsets.only(top:10,bottom: 70,right: 50,left: 50),
                 child: Column(
@@ -197,7 +197,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           "LOG ALGORITM DETECTED FROM IMAGE",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 0,
+                            fontSize: 20,
                             fontFamily: 'Prompt-Italic',
                             fontWeight: FontWeight.bold,
                           ),
@@ -205,7 +205,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                     Container(
-                      height: 0,
+                      height: 40,
                       child: SingleChildScrollView(
                         child: _listEmailStrings != null
                             ? ListView.builder(
@@ -215,18 +215,17 @@ class _DetailScreenState extends State<DetailScreen> {
                           itemBuilder: (context, index) =>
                           // _text(context,_listEmailStrings[index],index),
                           Container(
-                            color: Colors.blueGrey,
-                            child: Center(
+
                               child: Text(
                                 _listEmailStrings[index],
                                 style: TextStyle(
                                   color: Colors.lightGreen,
-                                  fontSize: 0,
+                                  fontSize: 17,
                                   fontFamily: 'Roboto',
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
+
                           ),
                         )
                             : Container(),
@@ -261,17 +260,81 @@ class _DetailScreenState extends State<DetailScreen> {
         player.play('sounds/beep.mp3');
 
         encuentra = true;
-        print('WsAbdiel 33');
+        print('wsbarcode 3w3 $_lista[i]');
         getScanner(context,_lista[i],batch,clientID,UsersID,batchID);
-        setState(() {
-          lecturaScanner = _lista[i];
-        });
 
+        groupConsole.clear();
         return Text('LA LISTA : $_lista');
+      }else{
+        groupConsole.clear();
+        AudioCache player = AudioCache();
+        player.play('sounds/fail.mp3');
+        EasyDialog(
+            closeButton: true,
+            width: 280,
+            height: 500,
+            contentPadding:
+            EdgeInsets.only(top: 1.0),
+            // Needed for the button design
+            contentList: [
+              Container(
+                child: Lottie.asset(
+                  'assets/json/fail.json',
+                  width: 200,
+                  height: 200,
+                ),
+              ),
+              Container(
+                child: Text(
+                  "Fail!! we not found the station",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.redAccent,),
+                  textScaleFactor: 2.8,
+                ),
+              ),
+              Container(
+                child: Text(
+                  "\n Scan again or check if information  are correct \n",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black87),
+                  textScaleFactor: 1.7,
+                ),
+              ),
+
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: Colors.greenAccent,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10.0),
+                        bottomRight: Radius.circular(10.0))),
+                child: FlatButton(
+                  onPressed: () {
+
+                    // Navigator.pushNamed(
+                    //   context,
+                    //   'scanner',
+                    //   arguments: {
+                    //     'ID':batch, 'UsersID':UsersID, 'clientID':clientID,
+                    //   },
+                    // );
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "Okay",
+                    style: TextStyle(color: Colors.black87),
+                    textScaleFactor: 1.3,
+                  ),
+                ),
+              ),
+            ]).show(context);
       }
 
     }
     if(encuentra==false){
+      groupConsole.clear();
       AudioCache player = AudioCache();
       player.play('sounds/fail.mp3');
       EasyDialog(
@@ -372,7 +435,7 @@ Widget _update(String UsersID,String clientID , String ID,String console_group,S
 }
 
 Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, String clientID, String UsersID, String batchID ) async {
-  print('WsAbdiel 333-');
+  print('wsbarcode 333-');
   print('wsbarcode $scanner ande the bitacora $bitacora');
   // print('WsAbdiel 1 $station');
   var url = 'http://3.217.149.82/batchjobx/ws/ws_valida_scanner.php?scanner=$scanner&bitacora=$bitacora';
@@ -380,7 +443,7 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
   // Await the http get response, then decode the json-formatted response.
   var response = await http.get(Uri.parse(url));
   if (response.statusCode == 200) {
-    print('WsAbdiel 333-6');
+    print('wsbarcode 333-6');
     var jsonResponse = convert.jsonDecode(response.body);
     var scanws = jsonResponse['SCAN'];
     var sts = jsonResponse['STS'];
@@ -495,6 +558,7 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
               ),
             ),
           ]).show(context);
+      console = '';
 
     }else{
       print('WsAbdiel 333-666-');
@@ -503,7 +567,69 @@ Future<List<ConsultaBatch>> getScanner(context,String scanner, String bitacora, 
     }
 
   } else {
-    // _dialogFailNet();
+    AudioCache player = AudioCache();
+    player.play('sounds/fail.mp3');
+    EasyDialog(
+        closeButton: true,
+        width: 280,
+        height: 500,
+        contentPadding:
+        EdgeInsets.only(top: 1.0),
+        // Needed for the button design
+        contentList: [
+          Container(
+            child: Lottie.asset(
+              'assets/json/fail.json',
+              width: 200,
+              height: 200,
+            ),
+          ),
+          Container(
+            child: Text(
+              "Fail!! we not found the station",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.redAccent,),
+              textScaleFactor: 2.8,
+            ),
+          ),
+          Container(
+            child: Text(
+              "\n Scan again or check if information  are correct \n",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.black87),
+              textScaleFactor: 1.7,
+            ),
+          ),
+
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: Colors.greenAccent,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0))),
+            child: FlatButton(
+              onPressed: () {
+
+                // Navigator.pushNamed(
+                //   context,
+                //   'scanner',
+                //   arguments: {
+                //     'ID':batch, 'UsersID':UsersID, 'clientID':clientID,
+                //   },
+                // );
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                "Okay",
+                style: TextStyle(color: Colors.black87),
+                textScaleFactor: 1.3,
+              ),
+            ),
+          ),
+        ]).show(context);
   }
 
 
