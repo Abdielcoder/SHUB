@@ -12,7 +12,7 @@ class DetailScreenController {
   }
 
   void close() {
-    Navigator.pop(context);
+    refresh();
   }
 
 }

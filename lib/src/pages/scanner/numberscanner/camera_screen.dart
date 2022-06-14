@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
-
 import 'package:camera/camera.dart';
+import 'package:easy_dialog/easy_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -17,13 +17,15 @@ var batch_number;
 var batchID;
 var consoleGroup;
 var station;
+var pantalla = 'false';
+
 List<String> scanSelected = [];
 SharedPreferences pref;
 
 Future<List<ConsultaBatch>> fetchPhotos(http.Client client, String UsersID, String clientID, String ID ) async {
   final response = await client
       .get(Uri.parse('http://3.217.149.82/batchjobx/ws/ws_consultaBatch.php?UsersID=$UsersID&clientID=$clientID&bitacoraID=$ID'));
-
+  print(' qwerty   http://3.217.149.82/batchjobx/ws/ws_consultaBatch.php?UsersID=$UsersID&clientID=$clientID&bitacoraID=$ID');
   print(response.body);
   // Use the compute function to run parsePhotos in a separate isolate.
   return compute(parsePhotos, response.body);
@@ -36,19 +38,6 @@ List<ConsultaBatch> parsePhotos(String responseBody) {
   return parsed.map<ConsultaBatch>((json) => ConsultaBatch.fromJson(json)).toList();
 }
 
-
-
-// Future<void> main() async {
-//   runApp(
-//     MaterialApp(
-//       title: 'Camera Example',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: ExamplePage(),
-//     ),
-//   );
-// }
 class ExamplePage extends StatefulWidget {
   static Future init() async {
     pref = await SharedPreferences.getInstance();
@@ -99,7 +88,7 @@ class ExamplePageState extends State<ExamplePage> {
   @override
   void initState() {
     super.initState();
-
+    setState(() {});
     _initCamera();
   }
 
@@ -114,6 +103,7 @@ class ExamplePageState extends State<ExamplePage> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     final arguments = (ModalRoute
         .of(context)
         ?.settings
@@ -123,8 +113,11 @@ class ExamplePageState extends State<ExamplePage> {
     print(arguments['ID']);
     UsersID = arguments['UsersID'];
     clientID = arguments['clientID'];
+    pantalla = arguments['pantalla'];
     batch_number = arguments['batch_number'];
     ID = arguments['ID'];
+
+
 
     return WillPopScope(
       onWillPop: () async => true,
@@ -195,6 +188,8 @@ class ExamplePageState extends State<ExamplePage> {
   }
 
   Future<void> _initCamera() async {
+
+
     final cameras = await availableCameras();
 
     if (cameras.length >= 0) {
@@ -217,6 +212,7 @@ class ExamplePageState extends State<ExamplePage> {
       future: fetchPhotos(http.Client(), UsersID, clientID, ID),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
+
           return const Center(
             child: Text('An error has occurred!'),
           );
@@ -349,8 +345,106 @@ class ExamplePageState extends State<ExamplePage> {
     );
   }
 
+  void easy(){
+    EasyDialog(
+        closeButton: true,
+        width: 280,
+        height: 500,
+        contentPadding:
+        EdgeInsets.only(top: 1.0),
+        // Needed for the button design
+        contentList: [
+          Container(
+            child: Lottie.asset(
+              'assets/json/success2.json',
+              width: 200,
+              height: 200,
+            ),
+          ),
+          Container(
+            child: Text(
+              "Success!! we found the station",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.teal),
+              textScaleFactor: 1.2,
+            ),
+          ),
+          Container(
+            child: Text(
+              "CONSOLO GROUP:",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.teal),
+              textScaleFactor: 2.2,
+            ),
+          ),
+          Container(
+            child: Center(
+              // child: Text(
+              //   "e",
+              //   style: TextStyle(
+              //       fontWeight: FontWeight.bold, color: Colors.black87),
+              //   textScaleFactor: 2.2,
+              // ),
+            ),
+          ),
+          // Container(
+          //   child: Text(
+          //     "STATUS: $sts",
+          //     style: TextStyle(
+          //         fontWeight: FontWeight.bold, color: Colors.green),
+          //     textScaleFactor: 1.2,
+          //   ),
+          // ),
+          // Container(
+          //   child: Text(
+          //     "$stws",
+          //     style: TextStyle(
+          //         fontWeight: FontWeight.bold, color: Colors.blue[900]),
+          //     textScaleFactor: 2.2,
+          //   ),
+          // ),
+          // Container(
+          //   alignment: Alignment.center,
+          //   child: Text(
+          //     "$nuws",
+          //     style: TextStyle(
+          //         fontWeight: FontWeight.bold, color: Colors.blue[900]),
+          //     textScaleFactor: 6.2,
+          //   ),
+          // ),
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: Colors.greenAccent,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0))),
+            child: FlatButton(
+              onPressed: () {
+                // Navigator.of(context).pop();
+                //  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                //      ExamplePage()), (Route<dynamic> route) => false);
+
+                // Navigator.pushAndRemoveUntil<void>(
+                //   context,
+                //   MaterialPageRoute<void>(builder: (BuildContext context) => ExamplePage()),
+                //   ModalRoute.withName('scanner',),
+                // );
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                "Ok",
+                style: TextStyle(color: Colors.black87),
+                textScaleFactor: 1.3,
+              ),
+            ),
+          ),
+        ]).show(context);
+  }
+
   Widget _cameraPreview() {
     if (initialized) {
+
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: _CroppedCameraPreview(
