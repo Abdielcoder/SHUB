@@ -95,7 +95,7 @@ class _DetailScreenState extends State<DetailScreen> {
     final RecognisedText  text = await _textDetector.processImage(inputImage);
 
     // Pattern of RegExp for matching a general email address
-    String pattern =r"^[0-9]*$";
+    String pattern =r'^[A-Za-z0-9_.]+$';
     //   r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$";
     RegExp regEx = RegExp(pattern);
 
