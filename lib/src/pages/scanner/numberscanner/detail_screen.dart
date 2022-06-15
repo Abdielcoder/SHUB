@@ -171,7 +171,7 @@ class _DetailScreenState extends State<DetailScreen> {
           ? Stack(
         children: [
           Container(
-            width: double.infinity,
+            width: double.maxFinite,
             color: Colors.black,
             child: CustomPaint(
               foregroundPainter: TextDetectorPainter(
@@ -190,7 +190,7 @@ class _DetailScreenState extends State<DetailScreen> {
             alignment: Alignment.bottomCenter,
             child: Card(
               elevation: 0,
-              color: Colors.black54,
+              color: Colors.black87,
               child: Padding(
                 padding: const EdgeInsets.only(top:10,bottom: 20,right: 50,left: 50),
                 child: Column(
@@ -201,10 +201,10 @@ class _DetailScreenState extends State<DetailScreen> {
                       padding: const EdgeInsets.only(bottom: 1.0),
                       child: Center(
                         child: Text(
-                          "LOG ALGORITM DETECTED FROM IMAGE",
+                          "LOG ALGORITHM IMAGE",
                           style: TextStyle(
-                            color: Colors.redAccent,
-                            fontSize: 20,
+                            color: Colors.yellowAccent,
+                            fontSize: 18,
                             fontFamily: 'Prompt-Italic',
                             fontWeight: FontWeight.bold,
                           ),
@@ -836,7 +836,7 @@ class TextDetectorPainter extends CustomPainter {
 
     final Paint paint = Paint()
       ..style = PaintingStyle.stroke
-      ..color = Colors.yellowAccent
+      ..color = Colors.lightGreen
       ..strokeWidth = 2.0;
 
     for (TextElement element in elements) {
