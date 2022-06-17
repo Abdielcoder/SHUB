@@ -32,7 +32,7 @@ class _BottomBarState extends State<BottomBar> {
             children: <Widget>[
               Icon(
                 widget.icons,
-                color: Colors.indigo,
+                color: Colors.blue[900],
               ),
               SizedBox(
                 width: 1,
@@ -47,6 +47,34 @@ class _BottomBarState extends State<BottomBar> {
             ],
           ),
         )
-            : Icon(widget.icons));
+            :
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(30),
+          ),
+          padding:
+          EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+          child: Row(
+            children: <Widget>[
+              Icon(
+                widget.icons,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 1,
+              ),
+              Text(
+                widget.text,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17),
+              ),
+            ],
+          ),
+        )
+
+    );
   }
 }

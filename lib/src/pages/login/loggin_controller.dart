@@ -45,7 +45,7 @@ class LoginController {
         print('Error de inicio de session');
         _customButtonEasyDialog();
       }else{
-
+        _progressDialog.close();
         Navigator.pushNamed(
           context,
           'home',

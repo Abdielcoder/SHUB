@@ -284,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
                           margin: EdgeInsets.symmetric(horizontal: 50),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              color: Colors.black87),
+                              color: Colors.black),
                           child: Center(
                             child: Text(
                               "Login",
