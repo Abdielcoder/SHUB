@@ -73,16 +73,7 @@ class _HomePageState extends State<HomePage> {
     print('ARGUMENTS HOME SCREEN : $arguments');
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage("https://wallpaper.dog/large/10762816.png"
-            ),
-            fit: BoxFit.cover,
-          ),
-        ),
-    child: ClipRRect( // make sure we apply clip it properly
-    child: BackdropFilter(
-    filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
+       color: Colors.black,
         child: Stack(
           children: <Widget>[
 
@@ -173,7 +164,7 @@ class _HomePageState extends State<HomePage> {
               ),
             )
           ],
-        ))),
+        ),
       ),
     );
   }
@@ -191,54 +182,59 @@ class _HomePageState extends State<HomePage> {
             child: Text('An error has occurred!'),
           );
         } else if (snapshot.hasData) {
-          return Padding(
-              padding: const EdgeInsets.all(30),
-        child: ClipRRect(
-        borderRadius: BorderRadius.circular(120),
-            child: GridView.builder(
-              gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
-              childAspectRatio: MediaQuery.of(context).size.width /
-                  (MediaQuery.of(context).size.height / 4),),
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: new EdgeInsets.only(right: 10,top: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.black87,
-                //     image: new DecorationImage(
-                //       colorFilter:
-                //       ColorFilter.mode(Colors.black.withOpacity(0.2),
-                //           BlendMode.dstATop),
-                // image: NetworkImage("https://mecaluxmx.cdnwm.com/blog/img/orden-picking-wms.1.19.jpg"),
-                //       fit: BoxFit.cover,
-                //     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: InkWell(
-                      onTap: (){
-                        Navigator.pushNamed(
-                          context,
-                          'scanner',
-                          arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}','UsersID':UsersID, 'clientID':clientID},
-                        );
-                      },
-                      child: Text(
-                          '${snapshot.data[index].batch_number}',
-                              textAlign:TextAlign.center,
-                        style: TextStyle(color: Colors.white,
-                          fontSize: MediaQuery.of(context).size.width /
-                              (MediaQuery.of(context).size.height / 50),
-                        ),
+          return Container(
+            margin: new EdgeInsets.only(top: 80),
+            child: Padding(
+                padding: const EdgeInsets.all(30),
 
+              child: GridView.builder(
+                gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,
+                childAspectRatio: MediaQuery.of(context).size.width /
+                    (MediaQuery.of(context).size.height / 3),),
+                itemBuilder: (BuildContext context, int index) {
+                  return  ClipRRect(
+                      borderRadius: BorderRadius.circular(120),
+                    child: Container(
+                      margin: new EdgeInsets.only(right: 10,top: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.red[900],
+                    //     image: new DecorationImage(
+                    //       colorFilter:
+                    //       ColorFilter.mode(Colors.black.withOpacity(0.2),
+                    //           BlendMode.dstATop),
+                    // image: NetworkImage("https://mecaluxmx.cdnwm.com/blog/img/orden-picking-wms.1.19.jpg"),
+                    //       fit: BoxFit.cover,
+                    //     ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: InkWell(
+                          onTap: (){
+                            Navigator.pushNamed(
+                              context,
+                              'scanner',
+                              arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}','UsersID':UsersID, 'clientID':clientID},
+                            );
+                          },
+                          child: Text(
+                              '${snapshot.data[index].batch_number}',
+                                  textAlign:TextAlign.center,
+                            style: TextStyle(color: Colors.white,
+                              fontSize: MediaQuery.of(context).size.width /
+                                  (MediaQuery.of(context).size.height / 50),
+                            ),
+
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-              itemCount: snapshot.data.length,
+                  );
+                },
+                itemCount: snapshot.data.length,
+              ),
             ),
-          ));
+          );
 
 
           // return Container(

@@ -129,8 +129,8 @@ class _LoginPageState extends State<LoginPage> {
               duration: Duration(milliseconds: 1000),
               decoration: BoxDecoration(
                   gradient: LinearGradient(begin: Alignment.topLeft, colors: [
-                    MyColors.colorAqua,
-                    MyColors.primaryColor,
+                   Colors.black87,
+                    Colors.black87,
                   ])),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -191,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
-                                    color: Color.fromRGBO(32, 132, 232, .3),
+                                    color: Colors.black87,
                                     blurRadius: 20,
                                     offset: Offset(0, 10))
                               ]),
@@ -284,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
                           margin: EdgeInsets.symmetric(horizontal: 50),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              color: MyColors.primaryColor),
+                              color: Colors.black87),
                           child: Center(
                             child: Text(
                               "Login",
@@ -386,7 +386,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Text(
                                     "© copyright 2022",
                                     style: TextStyle(
-                                        color: Colors.blue.shade900,
+                                        color: Colors.black87,
                                         fontFamily: "Sofia",
                                         fontWeight: FontWeight.bold),
                                   )
