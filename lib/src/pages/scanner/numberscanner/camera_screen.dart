@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:easy_dialog/easy_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -124,18 +125,18 @@ class ExamplePageState extends State<ExamplePage> {
       child: Scaffold(
 
           body: Container(
-
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage("https://wallpaper.dog/large/10762816.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: ClipRRect( // make sure we apply clip it properly
-                  child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-                      child: Column(
+            color: Colors.black,
+                      child: Stack(
                         children: [
+                          Expanded(
+                            child:
+                              Container(
+                                  margin: EdgeInsets.only(top: 30),
+                                  width: MediaQuery.of(context).size.height,
+                                  height: MediaQuery.of(context).size.height,
+                                  child: _cameraPreview()),
+
+                          ),
                           Container(
                               alignment: Alignment.topCenter,
                               margin: EdgeInsets.only(top: 40),
@@ -143,13 +144,13 @@ class ExamplePageState extends State<ExamplePage> {
                                 'SCAN UTILITY',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 28,
-                                    fontFamily: 'Prompt-Italic',
+                                    fontFamily: 'Roboto',
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
                               )
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: 0),
+                            margin: EdgeInsets.only(top: 80),
                             alignment: Alignment.topCenter,
                             child: Lottie.asset(
                               'assets/json/code3.json',
@@ -157,13 +158,10 @@ class ExamplePageState extends State<ExamplePage> {
 
                             ),
                           ),
+
                           Container(
-                              width: 800,
-                              height: 300,
-                              child: _cameraPreview()),
-                          Container
-                            (
-                              margin: EdgeInsets.only(top: 30),
+                            alignment: Alignment.bottomCenter,
+                              margin: EdgeInsets.only(bottom: 80git ),
                               child: _button()),
                           Center(
                             child: Container(
@@ -182,8 +180,8 @@ class ExamplePageState extends State<ExamplePage> {
                     //   ),
                   )
               )
-          )
-      ),
+
+      ,
     );
   }
 
@@ -299,50 +297,94 @@ class ExamplePageState extends State<ExamplePage> {
 
   Widget _button() {
     print("############");
-    return Ink(
-      decoration: const ShapeDecoration(
-        color: Colors.lightBlue,
-        shape: CircleBorder(),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(120),
-        child: Container(
-          color: Colors.black,
-          child: IconButton(
-            iconSize: 60,
-            icon: Icon(Icons.camera_alt),
-            color: Colors.white,
-            onPressed: () async {
-              // If the returned path is not null navigate
-              // to the DetailScreen
-              await _takePicture().then((String path) {
-                print("############" + path);
-                if (path != null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          DetailScreen(
-                            imagePath: path,
-                            batchID: batchID,
-                            ID: ID,
-                            UsersID: UsersID,
-                            clientID:clientID,
 
-                            groupConsole: scanSelected,
-                          ),
-                    ),
-                  );
-                } else {
-                  print('Image path not found!');
-                }
-              });
-            },
-/////
-          ),
-        )
+   return AnimatedButton(
+      onPress: () async{
+              await _takePicture().then((String path) {
+        print("############" + path);
+        if (path != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  DetailScreen(
+                    imagePath: path,
+                    batchID: batchID,
+                    ID: ID,
+                    UsersID: UsersID,
+                    clientID:clientID,
+
+                    groupConsole: scanSelected,
+                  ),
+            ),
+          );
+        } else {
+          print('Image path not found!');
+        }
+      });
+
+      },
+      height: 50,
+      width: 100,
+      text: 'SCAN',
+      gradient: LinearGradient(colors: [Colors.black45, Colors.black87]),
+      selectedGradientColor: LinearGradient(
+          colors: [Colors.red[900], Colors.red[800]]),
+      isReverse: true,
+      selectedTextColor: Colors.white,
+      transitionType: TransitionType.LEFT_CENTER_ROUNDER,
+      textStyle: TextStyle(color: Colors.white,
+        fontSize: MediaQuery.of(context).size.width /
+            (MediaQuery.of(context).size.height / 35),
       ),
+      borderColor: Colors.white,
+      borderWidth: 1,
     );
+
+//     return Ink(
+//       decoration: const ShapeDecoration(
+//         color: Colors.lightBlue,
+//         shape: CircleBorder(),
+//       ),
+//       child: ClipRRect(
+//         borderRadius: BorderRadius.circular(120),
+//         child: Container(
+//           color: Colors.black,
+//           child: IconButton(
+//             iconSize: 60,
+//             icon: Icon(Icons.camera_alt),
+//             color: Colors.white,
+//             onPressed: () async {
+//               // If the returned path is not null navigate
+//               // to the DetailScreen
+//               await _takePicture().then((String path) {
+//                 print("############" + path);
+//                 if (path != null) {
+//                   Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) =>
+//                           DetailScreen(
+//                             imagePath: path,
+//                             batchID: batchID,
+//                             ID: ID,
+//                             UsersID: UsersID,
+//                             clientID:clientID,
+//
+//                             groupConsole: scanSelected,
+//                           ),
+//                     ),
+//                   );
+//                 } else {
+//                   print('Image path not found!');
+//                 }
+//               });
+//             },
+// /////
+//           ),
+//         )
+//       ),
+//     );
   }
 
   void easy(){
@@ -505,7 +547,7 @@ class _CroppedCameraPreview extends StatelessWidget {
           Container(
             decoration: ShapeDecoration(
               shape: CardScannerOverlayShape(
-                borderColor: Colors.red,
+                borderColor: Colors.greenAccent,
                 borderRadius: 12,
                 borderLength: 15,
                 borderWidth: 6,
@@ -519,7 +561,7 @@ class _CroppedCameraPreview extends StatelessWidget {
 }
 ////////////
 // クレカ標準の比
-const _CARD_ASPECT_RATIO = 3 / 9;
+const _CARD_ASPECT_RATIO = 3 / 2;
 // 横の枠線marginを決める時用のfactor
 // 横幅の5%のサイズのmarginをとる
 const _OFFSET_X_FACTOR = 0.05;
