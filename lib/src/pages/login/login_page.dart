@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:simple_animations/multi_tween/multi_tween.dart';
@@ -255,114 +256,31 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        print('forget working working');
-                      },
-                      child: Container(
-                        child: FadeAnimation(
-                            1.5,
-                            Text(
-                              "",
-                              style: TextStyle(
-                                  color: Colors.grey, fontFamily: "Sofia"),
-                            )
-                        ),
-                      ),
-                    ),
+
                     SizedBox(
                       height: 20,
                     ),
-                    FadeAnimation(
-                      1.6,
-                      FlatButton(
-                        onPressed: _con.login,
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        child: Container(
-                          height: 50,
-                          margin: EdgeInsets.symmetric(horizontal: 50),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Colors.black),
-                          child: Center(
-                            child: Text(
-                              "Login",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                      AnimatedButton(
+                        onPress: () {
+                         _con.login();
+                          },
+                        height: 50,
+                        width: 100,
+                        text: 'Login',
+                        gradient: LinearGradient( colors: [Colors.blue[900], Colors.blue[800]]),
+                        selectedGradientColor: LinearGradient(
+                            colors: [Colors.black87, Colors.black87]),
+                        isReverse: true,
+                        selectedTextColor: Colors.white,
+                        transitionType: TransitionType.LEFT_CENTER_ROUNDER,
+                        textStyle: TextStyle(color: Colors.white,
+                          fontSize: MediaQuery.of(context).size.width /
+                              (MediaQuery.of(context).size.height / 25),
                         ),
+                        borderColor: Colors.white,
+                        borderWidth: 1,
                       ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    // FadeAnimation(
-                    //     1.7,
-                    //     Text(
-                    //       "Continua con login social & OTP",
-                    //       style: TextStyle(
-                    //           color: Colors.grey, fontFamily: "Sofia"),
-                    //     )),
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: <Widget>[
-                    //     Container(
-                    //       child: FadeAnimation(
-                    //           1.8,
-                    //           Container(
-                    //               child: MaterialButton(
-                    //                 onPressed: () {},
-                    //                 color: Color(0xFF3b5998),
-                    //                 textColor: Colors.white,
-                    //                 child: Icon(
-                    //                   FontAwesomeIcons.facebookF,
-                    //                   size: 22,
-                    //                 ),
-                    //                 padding: EdgeInsets.all(16),
-                    //                 shape: CircleBorder(),
-                    //               ))),
-                    //     ),
-                    //     // SizedBox(width: 10,),
-                    //     Container(
-                    //       child: FadeAnimation(
-                    //           1.9,
-                    //           Container(
-                    //               child: MaterialButton(
-                    //                 onPressed: () {},
-                    //                 color: Color(0xFFEA4335),
-                    //                 textColor: Colors.white,
-                    //                 child: Icon(
-                    //                   FontAwesomeIcons.google,
-                    //                   size: 22,
-                    //                 ),
-                    //                 padding: EdgeInsets.all(16),
-                    //                 shape: CircleBorder(),
-                    //               ))),
-                    //     ),
-                    //     Container(
-                    //       child: FadeAnimation(
-                    //           1.9,
-                    //           Container(
-                    //               child: MaterialButton(
-                    //                 onPressed: () {},
-                    //                 color: Color(0xFF34A853),
-                    //                 textColor: Colors.white,
-                    //                 child: Icon(
-                    //                   FontAwesomeIcons.mobileAlt,
-                    //                   size: 22,
-                    //                 ),
-                    //                 padding: EdgeInsets.all(16),
-                    //                 shape: CircleBorder(),
-                    //               ))),
-                    //     ),
-                    //   ],
-                    // ),
+
                     SizedBox(height: 20),
                     GestureDetector(
                       onTap: () {

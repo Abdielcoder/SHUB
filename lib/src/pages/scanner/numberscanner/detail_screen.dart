@@ -187,10 +187,11 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
           ),
           Container(
+            width: double.maxFinite,
             alignment: Alignment.bottomCenter,
             child: Card(
-              elevation: 0,
-              color: Colors.black87,
+              elevation: 20,
+              color: Colors.black,
               child: Padding(
                 padding: const EdgeInsets.only(top:10,bottom: 20,right: 50,left: 50),
                 child: Column(
@@ -198,7 +199,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 1.0),
+                      padding: const EdgeInsets.only(bottom: 0.0),
                       child: Center(
                         child: Text(
                           "LOG ALGORITHM IMAGE",
@@ -212,7 +213,8 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                     Container(
-                      height: 80,
+                      width: double.maxFinite,
+                      height: 150,
                       child: SingleChildScrollView(
                         child: _listEmailStrings != null
                             ? ListView.builder(
@@ -576,7 +578,7 @@ class _DetailScreenState extends State<DetailScreen> {
         // print('WsAbdiel 2 $station');
         //  _dialogSucces(scanws);
         EasyDialog(
-            closeButton: true,
+            closeButton: false,
             width: 280,
             height: 500,
             contentPadding:
@@ -644,7 +646,7 @@ class _DetailScreenState extends State<DetailScreen> {
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                    color: Colors.greenAccent,
+                    color: Colors.black,
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(10.0),
                         bottomRight: Radius.circular(10.0))),
@@ -663,83 +665,85 @@ class _DetailScreenState extends State<DetailScreen> {
                   },
                   child: Text(
                     "Ok",
-                    style: TextStyle(color: Colors.black87),
+                    style: TextStyle(color: Colors.white),
                     textScaleFactor: 1.3,
                   ),
                 ),
               ),
             ]).show(context);
         console = '';
-      } else {
-        AudioCache player = AudioCache();
-        player.play('sounds/fail.mp3');
-        EasyDialog(
-            closeButton: true,
-            width: 280,
-            height: 500,
-            contentPadding:
-            EdgeInsets.only(top: 1.0),
-            // Needed for the button design
-            contentList: [
-              Container(
-                child: Lottie.asset(
-                  'assets/json/fail.json',
-                  width: 200,
-                  height: 200,
-                ),
-              ),
-              Container(
-                child: Text(
-                  "Fail!! we not found the station",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.redAccent,),
-                  textScaleFactor: 2.8,
-                ),
-              ),
-              Container(
-                child: Text(
-                  "\n Scan again or check if information  are correct \n",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.black87),
-                  textScaleFactor: 1.7,
-                ),
-              ),
-
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: Colors.greenAccent,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10.0),
-                        bottomRight: Radius.circular(10.0))),
-                child: FlatButton(
-                  onPressed: () {
-
-                    // Navigator.pushNamed(
-                    //   context,
-                    //   'scanner',
-                    //   arguments: {
-                    //     'ID':batch, 'UsersID':UsersID, 'clientID':clientID,
-                    //   },
-                    // );
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    "Okay",
-                    style: TextStyle(color: Colors.black87),
-                    textScaleFactor: 1.3,
-                  ),
-                ),
-              ),
-            ]).show(context);
+       } else {
+        getSheetMaster();
       }
+      //   AudioCache player = AudioCache();
+      //   player.play('sounds/fail.mp3');
+      //   EasyDialog(
+      //       closeButton: true,
+      //       width: 280,
+      //       height: 500,
+      //       contentPadding:
+      //       EdgeInsets.only(top: 1.0),
+      //       // Needed for the button design
+      //       contentList: [
+      //         Container(
+      //           child: Lottie.asset(
+      //             'assets/json/fail.json',
+      //             width: 200,
+      //             height: 200,
+      //           ),
+      //         ),
+      //         Container(
+      //           child: Text(
+      //             "Fail!! we not found the station",
+      //             textAlign: TextAlign.center,
+      //             style: TextStyle(
+      //               fontWeight: FontWeight.bold, color: Colors.redAccent,),
+      //             textScaleFactor: 2.8,
+      //           ),
+      //         ),
+      //         Container(
+      //           child: Text(
+      //             "\n Scan again or check if information  are correct \n",
+      //             textAlign: TextAlign.center,
+      //             style: TextStyle(
+      //                 fontWeight: FontWeight.bold, color: Colors.black87),
+      //             textScaleFactor: 1.7,
+      //           ),
+      //         ),
+      //
+      //         Container(
+      //           width: double.infinity,
+      //           decoration: BoxDecoration(
+      //               color: Colors.greenAccent,
+      //               borderRadius: BorderRadius.only(
+      //                   bottomLeft: Radius.circular(10.0),
+      //                   bottomRight: Radius.circular(10.0))),
+      //           child: FlatButton(
+      //             onPressed: () {
+      //
+      //               // Navigator.pushNamed(
+      //               //   context,
+      //               //   'scanner',
+      //               //   arguments: {
+      //               //     'ID':batch, 'UsersID':UsersID, 'clientID':clientID,
+      //               //   },
+      //               // );
+      //               Navigator.of(context).pop();
+      //             },
+      //             child: Text(
+      //               "Okay",
+      //               style: TextStyle(color: Colors.black87),
+      //               textScaleFactor: 1.3,
+      //             ),
+      //           ),
+      //         ),
+      //       ]).show(context);
+      // }
     } else {
       AudioCache player = AudioCache();
       player.play('sounds/fail.mp3');
       EasyDialog(
-          closeButton: true,
+          closeButton: false,
           width: 280,
           height: 500,
           contentPadding:
@@ -775,7 +779,7 @@ class _DetailScreenState extends State<DetailScreen> {
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: Colors.greenAccent,
+                  color: Colors.black,
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(10.0),
                       bottomRight: Radius.circular(10.0))),
@@ -793,13 +797,367 @@ class _DetailScreenState extends State<DetailScreen> {
                 },
                 child: Text(
                   "Okay",
-                  style: TextStyle(color: Colors.black87),
+                  style: TextStyle(color: Colors.white),
                   textScaleFactor: 1.3,
                 ),
               ),
             ),
           ]).show(context);
     }
+  }
+
+  Future<List<ConsultaBatch>> getSheetMaster( ) async {
+    print('MasterSheet 333-');
+
+    // print('WsAbdiel 1 $station');
+    var url = 'http://3.217.149.82/batchjobx/ws/ws_consultaSheetMaster.php?UsersID=2&clientID=2&consolidation_group=4000894771';
+    print(url);
+    // Await the http get response, then decode the json-formatted response.
+    var response = await http.get(Uri.parse(url));
+    // var respuesta = response.body.contains('batch_number');
+    // print('MasterSheet 1 $respuesta');
+
+    if (response.statusCode == 200) {
+      print('wsbarcode 333-6');
+      var jsonResponse = convert.jsonDecode(response.body);
+      var batch_number_fail = jsonResponse['batch_number'];
+      var consolidation_group = jsonResponse['consolidation_group'];
+
+      print('MasterSheet 33 $batch_number_fail');
+          AudioCache player = AudioCache();
+          player.play('sounds/fail.mp3');
+          EasyDialog(
+              closeButton: false,
+              width: 280,
+              height: 500,
+              contentPadding:
+              EdgeInsets.only(top: 1.0),
+              // Needed for the button design
+              contentList: [
+                Container(
+                  child: Lottie.asset(
+                    'assets/json/fail.json',
+                    width: 200,
+                    height: 200,
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    "Fail!! we not found the station",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black,),
+                    textScaleFactor: 1.8,
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    "Batch Number Found",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.redAccent,),
+                    textScaleFactor: 1.8,
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    "${batch_number_fail}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.redAccent,),
+                    textScaleFactor: 2.2,
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    "For Console Group",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.redAccent,),
+                    textScaleFactor: 1.2,
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    "${consolidation_group}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.redAccent,),
+                    textScaleFactor: 2.2,
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    "\n Scan again or check if information  are correct \n",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.black87),
+                    textScaleFactor: 1.0,
+                  ),
+                ),
+
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10.0),
+                          bottomRight: Radius.circular(10.0))),
+                  child: FlatButton(
+                    onPressed: () {
+
+                      // Navigator.pushNamed(
+                      //   context,
+                      //   'scanner',
+                      //   arguments: {
+                      //     'ID':batch, 'UsersID':UsersID, 'clientID':clientID,
+                      //   },
+                      // );
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      "Okay",
+                      style: TextStyle(color: Colors.white),
+                      textScaleFactor: 1.3,
+                    ),
+                  ),
+                ),
+              ]).show(context);
+    }
+
+
+    //   if (scanws != 'SCAN ERROR') {
+    //     print('WsAbdiel 333-66');
+    //     _update(UsersID, clientID, bitacora, scanner, batchID);
+    //     // AudioCache player = AudioCache();
+    //     // player.play('sounds/beep.mp3');
+    //     // print('WsAbdiel 2 $station');
+    //     //  _dialogSucces(scanws);
+    //     EasyDialog(
+    //         closeButton: true,
+    //         width: 280,
+    //         height: 500,
+    //         contentPadding:
+    //         EdgeInsets.only(top: 1.0),
+    //         // Needed for the button design
+    //         contentList: [
+    //           Container(
+    //             child: Lottie.asset(
+    //               'assets/json/success2.json',
+    //               width: 200,
+    //               height: 200,
+    //             ),
+    //           ),
+    //           Container(
+    //             child: Text(
+    //               "Success!! we found the station",
+    //               style: TextStyle(
+    //                   fontWeight: FontWeight.bold, color: Colors.teal),
+    //               textScaleFactor: 1.2,
+    //             ),
+    //           ),
+    //           Container(
+    //             child: Text(
+    //               "CONSOLO GROUP:",
+    //               style: TextStyle(
+    //                   fontWeight: FontWeight.bold, color: Colors.teal),
+    //               textScaleFactor: 2.2,
+    //             ),
+    //           ),
+    //           Container(
+    //             child: Center(
+    //               child: Text(
+    //                 "$console",
+    //                 style: TextStyle(
+    //                     fontWeight: FontWeight.bold, color: Colors.black87),
+    //                 textScaleFactor: 2.2,
+    //               ),
+    //             ),
+    //           ),
+    //           Container(
+    //             child: Text(
+    //               "STATUS: $sts",
+    //               style: TextStyle(
+    //                   fontWeight: FontWeight.bold, color: Colors.green),
+    //               textScaleFactor: 1.2,
+    //             ),
+    //           ),
+    //           Container(
+    //             child: Text(
+    //               "$stws",
+    //               style: TextStyle(
+    //                   fontWeight: FontWeight.bold, color: Colors.blue[900]),
+    //               textScaleFactor: 2.2,
+    //             ),
+    //           ),
+    //           Container(
+    //             alignment: Alignment.center,
+    //             child: Text(
+    //               "$nuws",
+    //               style: TextStyle(
+    //                   fontWeight: FontWeight.bold, color: Colors.blue[900]),
+    //               textScaleFactor: 6.2,
+    //             ),
+    //           ),
+    //           Container(
+    //             width: double.infinity,
+    //             decoration: BoxDecoration(
+    //                 color: Colors.greenAccent,
+    //                 borderRadius: BorderRadius.only(
+    //                     bottomLeft: Radius.circular(10.0),
+    //                     bottomRight: Radius.circular(10.0))),
+    //             child: FlatButton(
+    //               onPressed: () {
+    //                 // Navigator.of(context).pop();
+    //                 //  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+    //                 //      ExamplePage()), (Route<dynamic> route) => false);
+    //
+    //                 // Navigator.pushAndRemoveUntil<void>(
+    //                 //   context,
+    //                 //   MaterialPageRoute<void>(builder: (BuildContext context) => ExamplePage()),
+    //                 //   ModalRoute.withName('scanner',),
+    //                 // );
+    //                 Navigator.of(context).pop();
+    //               },
+    //               child: Text(
+    //                 "Ok",
+    //                 style: TextStyle(color: Colors.black87),
+    //                 textScaleFactor: 1.3,
+    //               ),
+    //             ),
+    //           ),
+    //         ]).show(context);
+    //
+    //   } else {
+    //     AudioCache player = AudioCache();
+    //     player.play('sounds/fail.mp3');
+    //     EasyDialog(
+    //         closeButton: true,
+    //         width: 280,
+    //         height: 500,
+    //         contentPadding:
+    //         EdgeInsets.only(top: 1.0),
+    //         // Needed for the button design
+    //         contentList: [
+    //           Container(
+    //             child: Lottie.asset(
+    //               'assets/json/fail.json',
+    //               width: 200,
+    //               height: 200,
+    //             ),
+    //           ),
+    //           Container(
+    //             child: Text(
+    //               "Fail!! we not found the station",
+    //               textAlign: TextAlign.center,
+    //               style: TextStyle(
+    //                 fontWeight: FontWeight.bold, color: Colors.redAccent,),
+    //               textScaleFactor: 2.8,
+    //             ),
+    //           ),
+    //           Container(
+    //             child: Text(
+    //               "\n Scan again or check if information  are correct \n",
+    //               textAlign: TextAlign.center,
+    //               style: TextStyle(
+    //                   fontWeight: FontWeight.bold, color: Colors.black87),
+    //               textScaleFactor: 1.7,
+    //             ),
+    //           ),
+    //
+    //           Container(
+    //             width: double.infinity,
+    //             decoration: BoxDecoration(
+    //                 color: Colors.greenAccent,
+    //                 borderRadius: BorderRadius.only(
+    //                     bottomLeft: Radius.circular(10.0),
+    //                     bottomRight: Radius.circular(10.0))),
+    //             child: FlatButton(
+    //               onPressed: () {
+    //
+    //                 // Navigator.pushNamed(
+    //                 //   context,
+    //                 //   'scanner',
+    //                 //   arguments: {
+    //                 //     'ID':batch, 'UsersID':UsersID, 'clientID':clientID,
+    //                 //   },
+    //                 // );
+    //                 Navigator.of(context).pop();
+    //               },
+    //               child: Text(
+    //                 "Okay",
+    //                 style: TextStyle(color: Colors.black87),
+    //                 textScaleFactor: 1.3,
+    //               ),
+    //             ),
+    //           ),
+    //         ]).show(context);
+    //   }
+    // } else {
+    //   AudioCache player = AudioCache();
+    //   player.play('sounds/fail.mp3');
+    //   EasyDialog(
+    //       closeButton: true,
+    //       width: 280,
+    //       height: 500,
+    //       contentPadding:
+    //       EdgeInsets.only(top: 1.0),
+    //       // Needed for the button design
+    //       contentList: [
+    //         Container(
+    //           child: Lottie.asset(
+    //             'assets/json/fail.json',
+    //             width: 200,
+    //             height: 200,
+    //           ),
+    //         ),
+    //         Container(
+    //           child: Text(
+    //             "Fail!! we not found the station",
+    //             textAlign: TextAlign.center,
+    //             style: TextStyle(
+    //               fontWeight: FontWeight.bold, color: Colors.redAccent,),
+    //             textScaleFactor: 2.8,
+    //           ),
+    //         ),
+    //         Container(
+    //           child: Text(
+    //             "\n Scan again or check if information  are correct \n",
+    //             textAlign: TextAlign.center,
+    //             style: TextStyle(
+    //                 fontWeight: FontWeight.bold, color: Colors.black87),
+    //             textScaleFactor: 1.7,
+    //           ),
+    //         ),
+    //
+    //         Container(
+    //           width: double.infinity,
+    //           decoration: BoxDecoration(
+    //               color: Colors.greenAccent,
+    //               borderRadius: BorderRadius.only(
+    //                   bottomLeft: Radius.circular(10.0),
+    //                   bottomRight: Radius.circular(10.0))),
+    //           child: FlatButton(
+    //             onPressed: () {
+    //
+    //               // Navigator.pushNamed(
+    //               //   context,
+    //               //   'scanner',
+    //               //   arguments: {
+    //               //     'ID':batch, 'UsersID':UsersID, 'clientID':clientID,
+    //               //   },
+    //               // );
+    //               Navigator.of(context).pop();
+    //             },
+    //             child: Text(
+    //               "Okay",
+    //               style: TextStyle(color: Colors.black87),
+    //               textScaleFactor: 1.3,
+    //             ),
+    //           ),
+    //         ),
+    //       ]).show(context);
+    // }
   }
 
 

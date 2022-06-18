@@ -216,14 +216,22 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (BuildContext context, int index) {
                  return AnimatedButton(
                     onPress: () {
-                      _progressDialog.showProgressDialog(context,dismissAfter: Duration(seconds: 5),textToBeDisplayed:'Wait...',onDismiss:(){
+                      _progressDialog.showProgressDialog(context,dismissAfter: Duration(seconds: 3),textToBeDisplayed:'Wait...',onDismiss:(){
 
                       });
+
+                      Timer(Duration(seconds: 2), () {
+                        _progressDialog.showProgressDialog(context,dismissAfter: Duration(seconds: 3),textToBeDisplayed:'Wait...',onDismiss:(){
+
+                        });
+
                         Navigator.pushNamed(
                           context,
                           'scanner',
                           arguments: {'batch_number':'${snapshot.data[index].batch_number}','ID':'${snapshot.data[index].ID}','UsersID':UsersID, 'clientID':clientID},
                         );
+                      });
+
 
                     },
                     height: 70,

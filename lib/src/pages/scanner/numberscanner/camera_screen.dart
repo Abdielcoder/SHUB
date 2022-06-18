@@ -161,7 +161,7 @@ class ExamplePageState extends State<ExamplePage> {
 
                           Container(
                             alignment: Alignment.bottomCenter,
-                              margin: EdgeInsets.only(bottom: 80git ),
+                              margin: EdgeInsets.only(bottom: 80),
                               child: _button()),
                           Center(
                             child: Container(
@@ -329,7 +329,7 @@ class ExamplePageState extends State<ExamplePage> {
       text: 'SCAN',
       gradient: LinearGradient(colors: [Colors.black45, Colors.black87]),
       selectedGradientColor: LinearGradient(
-          colors: [Colors.red[900], Colors.red[800]]),
+          colors: [Colors.blue[900], Colors.blue[800]]),
       isReverse: true,
       selectedTextColor: Colors.white,
       transitionType: TransitionType.LEFT_CENTER_ROUNDER,

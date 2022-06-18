@@ -85,7 +85,7 @@ class LoginController {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-                color: Colors.greenAccent,
+                color: Colors.black,
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(10.0),
                     bottomRight: Radius.circular(10.0))),
@@ -96,6 +96,9 @@ class LoginController {
               child: Text(
                 "Okay",
                 textScaleFactor: 1.3,
+                style: TextStyle(
+                  color: Colors.white
+                ),
               ),
             ),
           ),
