@@ -128,15 +128,14 @@ class ExamplePageState extends State<ExamplePage> {
             color: Colors.black,
                       child: Stack(
                         children: [
-                          Expanded(
-                            child:
                               Container(
                                   margin: EdgeInsets.only(top: 30),
-                                  width: MediaQuery.of(context).size.height,
-                                  height: MediaQuery.of(context).size.height,
+                                  // width: MediaQuery.of(context).size.height,
+                                  // height: MediaQuery.of(context).size.height,
+                                  //
+                                  width: 800,
+                                  height: 800,
                                   child: _cameraPreview()),
-
-                          ),
                           Container(
                               alignment: Alignment.topCenter,
                               margin: EdgeInsets.only(top: 40),
@@ -147,10 +146,24 @@ class ExamplePageState extends State<ExamplePage> {
                                     fontFamily: 'Roboto',
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
-                              )
+                              ),
+
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: 80),
+                            alignment: Alignment.topCenter,
+                            margin: EdgeInsets.only(top: 72),
+                            child: Text(
+                              'Batch Number $batch_number',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 38,
+                                  fontFamily: 'Lexendeca-Regular',
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
+                            ),
+
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 90),
                             alignment: Alignment.topCenter,
                             child: Lottie.asset(
                               'assets/json/code3.json',
@@ -564,7 +577,7 @@ class _CroppedCameraPreview extends StatelessWidget {
 const _CARD_ASPECT_RATIO = 3 / 2;
 // 横の枠線marginを決める時用のfactor
 // 横幅の5%のサイズのmarginをとる
-const _OFFSET_X_FACTOR = 0.05;
+const _OFFSET_X_FACTOR = 0.07;
 
 class CardScannerOverlayShape extends ShapeBorder {
   const CardScannerOverlayShape({

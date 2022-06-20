@@ -595,7 +595,7 @@ class _ScannerPageState extends State<ScannerPage> {
           ),
           Container(
             child: Text(
-              "Fail!! we not found the station",
+              "Warning!! we not found the station",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.redAccent,),
@@ -651,7 +651,7 @@ class _ScannerPageState extends State<ScannerPage> {
           ),
           Container(
             child: Text(
-              "Fail!! SERVER CONNECTION",
+              "Warning!! SERVER CONNECTION",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.redAccent,),

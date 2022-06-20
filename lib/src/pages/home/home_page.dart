@@ -145,7 +145,7 @@ class _HomePageState extends State<HomePage> {
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(
-                padding: EdgeInsets.only(left: 54, right: 24, bottom: 30),
+                padding: EdgeInsets.only(left: 14, right: 14, bottom: 30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[

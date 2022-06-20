@@ -205,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                                         bottom: BorderSide(
                                             color: Colors.grey.shade200))),
                                 child: TextField(
-                                  controller: _con.emailController,
+                                  controller: TextEditingController(text: "ernesto"),
                                   decoration: InputDecoration(
                                       prefixIcon: Icon(
                                         Icons.email,
@@ -225,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                                             color: Colors.grey.shade200))),
                                 child: TextField(
                                   obscureText: !_passwordVisible,
-                                  controller: _con.passwordController,
+                                  controller: TextEditingController(text: "123"),
                                   decoration: InputDecoration(
                                       prefixIcon: Icon(Icons.vpn_key),
                                     suffixIcon: IconButton(
@@ -271,6 +271,7 @@ class _LoginPageState extends State<LoginPage> {
                         selectedGradientColor: LinearGradient(
                             colors: [Colors.black87, Colors.black87]),
                         isReverse: true,
+                        borderRadius: 50,
                         selectedTextColor: Colors.white,
                         transitionType: TransitionType.LEFT_CENTER_ROUNDER,
                         textStyle: TextStyle(color: Colors.white,

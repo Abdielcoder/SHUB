@@ -21,8 +21,12 @@ class LoginController {
 
   void login() async {
    _progressDialog.show(max: 10, msg: "Starting");
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
+
+
+   /* String email = emailController.text.trim();
+    String password = passwordController.text.trim();*/
+   String email = 'ernesto';
+   String password = '123';
     getRequest(email,password);
 
     }

@@ -673,7 +673,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ]).show(context);
         console = '';
        } else {
-        getSheetMaster();
+        getSheetMaster(UsersID,clientID,scanner);
       }
       //   AudioCache player = AudioCache();
       //   player.play('sounds/fail.mp3');
@@ -759,7 +759,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
             Container(
               child: Text(
-                "Fail!! we not found the station",
+                "Warning!! we not found the station",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.redAccent,),
@@ -806,11 +806,12 @@ class _DetailScreenState extends State<DetailScreen> {
     }
   }
 
-  Future<List<ConsultaBatch>> getSheetMaster( ) async {
-    print('MasterSheet 333-');
-
+  Future<List<ConsultaBatch>> getSheetMaster(String UserId, String ClientId,String CG ) async {
+    print('MasterSheet 71- $UserId');
+    print('MasterSheet 72- $ClientId');
+    print('MasterSheet 73- $CG');
     // print('WsAbdiel 1 $station');
-    var url = 'http://3.217.149.82/batchjobx/ws/ws_consultaSheetMaster.php?UsersID=2&clientID=2&consolidation_group=4000894771';
+    var url = 'http://3.217.149.82/batchjobx/ws/ws_consultaSheetMaster.php?UsersID=$UserId&clientID=$ClientId&consolidation_group=$CG';
     print(url);
     // Await the http get response, then decode the json-formatted response.
     var response = await http.get(Uri.parse(url));
@@ -843,7 +844,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 Container(
                   child: Text(
-                    "Fail!! we not found the station",
+                    "Warning!! we not found the station",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.black,),
